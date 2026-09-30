@@ -34,6 +34,8 @@ Source checks protect the **18-file developer inventory**, including `mod/marria
 
 The developer source is edited here; `game` is generated; the Steam `workshop` download is compared with the uploaded package. Publication preparation includes a new focused smoke of the projected family package. The previous development tests and recorded smoke remain evidence for their exact builds and are not a certification of newly transformed package content.
 
+The exact `2026-09-30-game-rc2` family package passed a focused combined smoke on CK3 1.19.0.6 with AGOT 0.5.2.1. MCA's candidate row and native tooltip were observed in a fresh English campaign: Ser Ronald Tinpenny displayed 24 = 6 skill + 18 age-based potential. This did not repeat the closed sorting, selection or dragonrider cases. The sibling Parley repository's `docs/RC2-SMOKE.md` records the complete scope and log caveats, including startup references to removed developer rules and three unattributed animation warnings. No new family-namespace errors appeared during the short run; whole-game clean logs and Workshop delivery are not claimed.
+
 ## Pull requests
 
 Preserve UTF-8/BOM policy, LF endings, the complete nine-language key/token sets and the private `tnt_ma_sort_` namespace. A scoring change needs meaningful expected-value cases; a GUI/sorting change needs relevant lifecycle/selection evidence. Explain designer weights as comparison points, not acceptance, inheritance or offspring probabilities.
