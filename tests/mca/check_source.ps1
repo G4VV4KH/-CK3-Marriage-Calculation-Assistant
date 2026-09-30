@@ -160,8 +160,9 @@ try {
     })
     Assert-Set $collisions @('gui/interaction_marriage.gui') 'Vanilla path allowlist'
     $descriptor = Read-Utf8 (Join-Path $mod 'descriptor.mod')
-    Assert-True ((Count-Matches $descriptor '(?m)^version\s*=\s*"3\.0\.1"\s*$') -eq 1) 'Expected MCA descriptor version 3.0.1'
-    Pass 'exact 18-file inventory; version 3.0.1; only marriage GUI collides with vanilla'
+    Assert-True ((Count-Matches $descriptor '(?m)^version\s*=\s*"3\.1\.0"\s*$') -eq 1) 'Expected MCA descriptor version 3.1.0'
+    Assert-True ((Count-Matches $descriptor '(?m)^supported_version\s*=\s*"1\.20\.\*"\s*$') -eq 1) 'Expected reviewed CK3 supported_version 1.20.*'
+    Pass 'exact 18-file inventory; version 3.1.0; only marriage GUI collides with vanilla'
 
     foreach ($file in $runtime) {
         $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
@@ -179,10 +180,10 @@ try {
 
     $marriagePath = Join-Path $mod 'gui/interaction_marriage.gui'
     $vanillaPath = Join-Path $game 'gui/interaction_marriage.gui'
-    $patchPath = Join-Path $PSScriptRoot 'interaction_marriage.vanilla.patch'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $vanillaPath).Hash -ceq '5DD66BB90983A4841EF9BA53F3B24D65AB5108882EEA10B466A8F40C4DCCE5BF') 'Vanilla marriage GUI fingerprint changed; review patch against the new game file'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $patchPath).Hash -ceq '1CB7770C938D069E0D7422F458F900F8BFA51AE212FB1063855E146BB157D2B0') 'Frozen marriage patch changed'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $marriagePath).Hash -ceq 'E4C35987B275F8BAC33EFAE2AFC75C08A9A3D14DB144B8354696DEB1D9436987') 'Production marriage GUI fingerprint changed; review and regenerate its frozen patch'
+    $patchPath = Join-Path $PSScriptRoot 'interaction_marriage.ck3-1.20.patch'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $vanillaPath).Hash -ceq '8AB7AA6C6B4B778E8AAD62B06768B166996E9DAB5B5400CDDD56C7F5822CF6AD') 'Vanilla marriage GUI fingerprint changed; review patch against the new game file'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $patchPath).Hash -ceq '06BEA5CA90317C4ADFDE1F5E1713F7333683717ADB07284B418A3ADE4FF8A695') 'Frozen marriage patch changed'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $marriagePath).Hash -ceq 'AA033AE800C5F23ED7BFBFA58FFAC6A7E972B796498F9FD9738778087948163E') 'Production marriage GUI fingerprint changed; review and regenerate its frozen patch'
     $marriage = Read-Utf8 $marriagePath
     $rebuilt = Apply-FrozenPatchInMemory (Read-Utf8 $vanillaPath) (Read-Utf8 $patchPath)
     Assert-True ($rebuilt -ceq $marriage) 'Frozen patch does not reconstruct the exact LF production GUI'

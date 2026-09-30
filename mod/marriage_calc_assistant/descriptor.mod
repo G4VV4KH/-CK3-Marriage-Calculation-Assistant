@@ -1,4 +1,4 @@
-﻿version="3.0.1"
+﻿version="3.1.0"
 name="Marriage Calculation Assistant"
 tags={
 	"Interface"
@@ -7,4 +7,4 @@ tags={
 dependencies={
 	"Parley: The Negotiating Table"
 }
-supported_version="1.19.*"
+supported_version="1.20.*"

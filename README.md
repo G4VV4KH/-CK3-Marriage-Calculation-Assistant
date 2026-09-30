@@ -2,38 +2,39 @@
 
 ## At a glance
 
-- 🟢 **Version 3.0.1** · Built for CK3 **1.19.x**; tested on **1.19.0.6**.
-- 🟢 **Requires Parley: The Negotiating Table.** Load MCA after Parley.
+- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.2**. Native picker checks passed with Parley 1.1.0.
+- 🟢 **Requires Parley 1.1.0.** Load MCA after Parley: The Negotiating Table.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
 - 🔴 **The score measures candidate gameplay potential.** It is not AI marriage acceptance or a prediction of the outcome of a particular marriage.
 - 🔴 **Marriage-window conflict:** another mod replacing `gui/interaction_marriage.gui` needs a functional compatibility patch.
+- 🔴 **Puppet arrangements use the native list**, without MCA scores or MCA sorting. Current AGOT compatibility is on hold.
 - 🔴 **Multiplayer is unverified.** Check the compatibility section before combining marriage-interface mods.
 
 ## Find the person behind the list
 
-A useful claim, an exceptional mind or a powerful potential ally: the best candidate depends on what you need. Find promising names in a long marriage list, then hover their scores to see what makes them stand out.
+A useful claim, an exceptional mind or a powerful ally: find promising names in a long marriage list, then hover their scores to see what makes them stand out.
 
 ## Compare candidates without losing the details
 
-MCA adds a score to candidate rows in CK3's marriage picker. Hover the number for a breakdown of its components. Switch to **MCA: by score** to bring the highest-scoring candidates to the top.
+Hover an **MCA** score for its component breakdown. Choose **MCA: by score** to bring the highest-scoring candidates to the top.
 
-It works when choosing a potential spouse from another court and when choosing someone from your own court to offer in marriage. Both lists use the same core components and weights. Potential alliance strength contributes when reported by the game's picker, and adapters can add opportunities specific to a setting.
+Compare spouses from other courts or candidates from your own court. Both lists use the same core weights. Alliance strength contributes when reported by the game's picker; adapters can add setting-specific opportunities.
 
-The score helps compare opportunities. It does not change marriage acceptance or modify the chosen candidate. Two candidates' scores are not prices to add together, and MCA points are separate from Parley's treaty score.
+Scores do not change marriage acceptance or modify candidates. They are not prices to add together; MCA points are separate from Parley's treaty score.
 
 ## What the score includes
 
-- **Visible inheritable qualities:** active inheritable traits receive positive or negative weights. The three positive intelligence, beauty and physique tiers are worth +10, +20 and +30; their negative counterparts subtract the same amounts. Other supported inheritable traits have their own weights. Hidden or recessive genetics are not inspected.
+- **Visible inheritable qualities:** positive intelligence, beauty and physique tiers receive +10, +20 and +30; negative counterparts subtract the same amounts. Other supported active inheritable traits have their own weights. Hidden or recessive genetics are not inspected.
 - **Skills:** up to 30 points, based on the five public skills and the standard assist-spouse contribution. Candidates younger than an effective age of 16, or incapable candidates, receive zero for this component. The score does not assume they will be eligible to serve on your council.
-- **Age-based reproductive potential:** a 0–20 index using effective age and selected visible restrictions. It is not a birth probability. A child's zero here describes current potential, not a prediction of lifelong childlessness.
-- **Dynastic prestige potential:** −5 to +45 points, scaled from the dynasty marriage-prestige table. This is an indication of dynastic standing, rather than the selected pair's exact prestige reward.
-- **Explicit claims:** the strongest explicit claim contributes, up to 24 points; pressed claims receive twice the weight of unpressed claims of the same rank. Marriage does not immediately transfer a claim or title to you.
-- **Potential alliance:** included only when the game's candidate row reports that opportunity, with up to 100 points based on the potential ally's military strength relative to yours. It does not guarantee military assistance.
+- **Age-based reproductive potential:** a 0–20 index using effective age and visible restrictions, not a birth probability. A child's zero describes current potential, not lifelong childlessness.
+- **Dynastic prestige potential:** −5 to +45 points from the dynasty marriage-prestige table: dynastic standing, not the pair's exact prestige reward.
+- **Explicit claims:** the strongest claim contributes up to 24 points; pressed claims receive twice the weight of unpressed claims of the same rank. Marriage does not immediately transfer a claim or title.
+- **Potential alliance:** up to 100 points from the potential ally's military strength relative to yours, only when the native row reports the opportunity. This does not guarantee assistance.
 
-These components, plus any adapter contributions, add up to the displayed score. Their point values are design weights for comparing candidates, not percentages or amounts of a shared game resource. A strong total can therefore combine different advantages: inspect the breakdown to find the ones that matter to your plans.
+These components and any adapter contributions add up to the score. They are comparison weights, not percentages or a shared game resource. Inspect the breakdown for the advantages that matter to your plans.
 
-Court position, arranger opinion and reluctance to release a courtier do not contribute. Hidden fertility/health, secret parentage, predicted children, the succession queue and the full utility of the selected couple are outside the model.
+Court position, arranger opinion and reluctance to release a courtier do not contribute. Hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value are outside the model.
 
 ## How to use it
 
@@ -42,43 +43,47 @@ Court position, arranger opinion and reluctance to release a courtier do not con
 3. Close the filter panel and choose **MCA: by score** for descending score order. Equal scores keep their current native order; unavailable scores go last.
 4. Choose **Default list** to restore the native ordering and filter controls.
 
-The separate pinned-player row stays pinned. Changing the active picker side, marriage type or candidate context clears the sorted snapshot; you can enable score sorting again. Selecting a moved row still selects the character displayed in that row.
+The pinned-player row stays pinned. Changing picker side, marriage type or candidate context clears the sorted snapshot. Selecting a moved row selects its displayed character.
+
+MCA scores and sorting apply when arranging directly as your own ruler. Arranging for a puppet keeps CK3's native list, with no MCA score or MCA sorting. Switching to a puppet clears the player-owned sorted snapshot; normal direct arrangements retain MCA controls.
 
 ## Compatibility and load order
 
-**Required:** Parley: The Negotiating Table.
+**Required for this release:** Parley: The Negotiating Table **1.1.0**.
 
 **Vanilla file replacement:** `gui/interaction_marriage.gui`. MCA adds a marriage-specific row, score controls, sorted-list projection and cleanup behavior. It does not replace `gui/shared/lists.gui`, `arrange_marriage_interaction` or `marry_off_interaction`.
 
-Another mod replacing `gui/interaction_marriage.gui` requires a patch preserving both mods' behavior; load order alone cannot merge the files. A mod changing only `gui/shared/lists.gui` can work when its row retains the vanilla `character_relation` block in the name/age column. This does not certify every list mod.
+Another `gui/interaction_marriage.gui` replacement needs a functional patch; load order cannot merge files. A mod changing only `gui/shared/lists.gui` can work if its row retains vanilla's `character_relation` block in the name/age column. This is not blanket list-mod compatibility.
 
 **Vanilla family order:**
 
 1. Parley: The Negotiating Table
 2. Marriage Calculation Assistant
 
-**AGOT family order:**
+**Historical RC3 AGOT order — CK3 1.19.0.6 only:**
 
-1. A Game of Thrones
-2. Parley: The Negotiating Table
-3. Marriage Calculation Assistant
-4. AGOT: Marriage Calculation Assistant
+1. A Game of Thrones **0.5.2.1**
+2. Parley: The Negotiating Table **1.0.0**
+3. Marriage Calculation Assistant **3.0.1**
+4. AGOT: Marriage Calculation Assistant **2.2.0**
 
-The checked AGOT combination uses **AGOT 0.5.2.1** and **AGOT:MCA 2.2.0**. Use the candidate-potential adapter from the 2.2 series with this MCA release; the older 2.1 adapter uses the previous scoring meaning.
+That historical result does not certify MCA 3.1.0 with AGOT on CK3 1.20. A current AGOT combination awaits upstream support and fresh combined validation. The older 2.1 adapter uses a different scoring model.
 
-**Available adapter:** AGOT: Marriage Calculation Assistant. It adds current-dragonrider potential and contains no replacement marriage GUI. No additional interface compatibility patches are included. Enable only one copy of each mod in a playset.
+**Historical adapter:** AGOT: Marriage Calculation Assistant adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
 ## Saves and tested scope
 
-Scores are calculated without stamping or modifying candidates. Optional sorting stores a temporary snapshot on the local player, and normal picker cleanup removes it. **Close the marriage picker before saving or disabling MCA.** Disabling the mod while a sorting snapshot is still stored can leave inert variables in the save.
+Sorting stores a temporary snapshot on the local player; normal picker cleanup removes it. **Close the marriage picker before saving or disabling MCA**, otherwise inert snapshot variables can remain. Candidates are not modified.
 
-The interface has been checked at 100% and 125% UI scale. Other scales, multiplayer and other total conversions are not verified.
+The retained screenshots show **MCA 3.0.1 on CK3 1.19.0.6**. Earlier interface checks covered 100% and 125% UI scale; those scale results do not certify this update. On CK3 1.20.0.2, RC7 passed large-list and both-side sorting, tooltip arithmetic, correct character selection and the tested filter/reset transitions, with no animation-state warnings.
 
-Version 3.0.1 restores the AGOT adapter's dragonrider contribution without changing the core weights, sorting or layout.
+RC7's Parley AI-world defect was fixed in RC8, which passed vanilla Parley/MCA validation with unchanged MCA runtime. Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and other total conversions remain unverified.
+
+Version 3.1.0 updates the native arranger portrait and guards scoring/sorting by the actual arranger. Core weights and adapter component meanings are unchanged.
 
 ## Feedback and support
 
-For a score report, include the candidate, the visible breakdown, picker side, mod versions, load order and a screenshot. For interface problems, also include resolution and UI scale. Distinguish a score that appears wrong from a marriage proposal the AI will not accept: they are separate calculations.
+Include the candidate, breakdown, picker side, versions, load order and a screenshot in score reports; add resolution and UI scale for interface problems. MCA score and AI marriage acceptance are separate calculations.
 
 - [Source and issue reports](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
 
@@ -97,13 +102,13 @@ For a score report, include the candidate, the visible breakdown, picker side, m
 
 ## Screenshots
 
-![Compare potential spouses from other courts, sorted by MCA score.](publishing/screenshots/01-recipient-candidate-list.png)
+![Historical RC3 (CK3 1.19.0.6): Compare potential spouses from other courts, sorted by MCA score.](publishing/screenshots/01-recipient-candidate-list.png)
 
-Compare potential spouses from other courts, sorted by MCA score.
+Historical RC3 (CK3 1.19.0.6): Compare potential spouses from other courts, sorted by MCA score.
 
-![Rank candidates from your own court when arranging a marriage with another ruler.](publishing/screenshots/02-sender-candidate-list.png)
+![Historical RC3 (CK3 1.19.0.6): Rank candidates from your own court when arranging a marriage with another ruler.](publishing/screenshots/02-sender-candidate-list.png)
 
-Rank candidates from your own court when arranging a marriage with another ruler.
+Historical RC3 (CK3 1.19.0.6): Rank candidates from your own court when arranging a marriage with another ruler.
 
 ## Contributing
 

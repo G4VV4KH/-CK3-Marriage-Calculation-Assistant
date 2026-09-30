@@ -4,6 +4,8 @@
 # This is SAVEABLE snapshot state, not transient engine memory. GUI lifecycle,
 # context and identity guards must clear it; candidates are never stamped.
 # Capture reuses the displayed grade values plus native alliance metadata.
+# CK3 1.20: only direct player arrangements can create/use this snapshot.
+# The effective arranger is a fresh GUI input, never persistent state.
 # Packed key = (rounded score + 10000) * 10000 + 9999 - native index.
 # Sort descending by score; equal scores preserve native order. Every key
 # round-trips exactly before capture. Three ordered passes validate indices
@@ -14,8 +16,8 @@
 
 tnt_ma_sort_start = {
 	scope = character
-	saved_scopes = { tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
-	is_valid = { is_ai = no }
+	saved_scopes = { tnt_ma_sort_arranger tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	is_valid = { is_ai = no exists = scope:tnt_ma_sort_arranger this = scope:tnt_ma_sort_arranger }
 	effect = {
 		if = { limit = { has_variable_list = tnt_ma_sort_seen } clear_variable_list = tnt_ma_sort_seen }
 		if = { limit = { has_variable_list = tnt_ma_sort_packed } clear_variable_list = tnt_ma_sort_packed }
@@ -37,6 +39,8 @@ tnt_ma_sort_start = {
 		set_variable = { name = tnt_ma_sort_received value = 0 }
 		if = {
 			limit = {
+				exists = scope:tnt_ma_sort_arranger
+				this = scope:tnt_ma_sort_arranger
 				exists = scope:tnt_ma_sort_n
 				exists = scope:tnt_ma_sort_side
 				exists = scope:tnt_ma_sort_matrilineal
@@ -74,8 +78,10 @@ tnt_ma_sort_start = {
 # Read-only. GUI passes fresh context, never trusts unguarded Var.Char while idle.
 tnt_ma_sort_context_valid = {
 	scope = character
-	saved_scopes = { tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	saved_scopes = { tnt_ma_sort_arranger tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
 	is_valid = {
+		exists = scope:tnt_ma_sort_arranger
+		this = scope:tnt_ma_sort_arranger
 		has_variable = tnt_ma_sort_state
 		OR = { var:tnt_ma_sort_state = 1 var:tnt_ma_sort_state = 2 }
 		exists = scope:tnt_ma_sort_n
@@ -128,7 +134,7 @@ tnt_ma_sort_context_valid = {
 
 tnt_ma_sort_collect = {
 	scope = character
-	saved_scopes = { actor tnt_ma_sort_n tnt_ma_sort_index tnt_ma_sort_alliance tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	saved_scopes = { actor tnt_ma_sort_arranger tnt_ma_sort_n tnt_ma_sort_index tnt_ma_sort_alliance tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
 	# Every authorization and stale-callback gate is inside the effect body.
 	# GUI root and ambient scope are candidate; actor is the snapshot owner.
 	effect = {
@@ -136,6 +142,8 @@ tnt_ma_sort_collect = {
 		if = {
 			limit = {
 				exists = scope:actor
+				exists = scope:tnt_ma_sort_arranger
+				scope:actor = scope:tnt_ma_sort_arranger
 				scope:actor = {
 					is_ai = no
 					has_variable = tnt_ma_sort_state
