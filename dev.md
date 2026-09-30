@@ -41,3 +41,13 @@ The exact `2026-09-30-game-rc2` family package passed a focused combined smoke o
 Preserve UTF-8/BOM policy, LF endings, the complete nine-language key/token sets and the private `tnt_ma_sort_` namespace. A scoring change needs meaningful expected-value cases; a GUI/sorting change needs relevant lifecycle/selection evidence. Explain designer weights as comparison points, not acceptance, inheritance or offspring probabilities.
 
 Include the problem, resulting behavior, tests run and remaining coverage. Do not commit saves, logs, local launcher descriptors, generated packages or Workshop downloads. Keep large historical research in the local backup archive; maintain concise current developer documentation here.
+
+## Release-chain journals
+
+[The dev-to-game journal](docs/releases/HISTORY.md), backed by `docs/releases/history.json`, records the current committed runtime associated with each verified game build. This is an association checked when recorded, not a claim about the original build commit or date.
+
+Use the sibling Parley repository's `tools/release/release_journal.py`; its release README documents `init`, `status` and `record`. Separate Steam, Paradox, Nexus and GitHub histories live at the release workspace's `game/_history/<build>/<mod>/<platform>/`, outside immutable game payloads and upload archives. Each history has JSON evidence and a readable `HISTORY.md`.
+
+Runtime hashes determine dev/game drift; GitHub's published revision is tracked separately so documentation-only commits do not invalidate game bytes. `UPLOADED` and `VERIFIED` require a publication URL, artifact identity and evidence. An upload is not download verification.
+
+RC3 retains the CK3 1.19.0.6 / AGOT 0.5.2.1 evidence scope. CK3 1.20 compatibility remains unverified; the release workspace's `release-workflow.json` manages the publication hold while that review is pending.
