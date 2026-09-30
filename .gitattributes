@@ -1,0 +1,3 @@
+tests/mca/interaction_marriage.vanilla.patch -whitespace
+# Preserve audited byte hashes on every platform, including UTF-8 BOMs.
+* -text

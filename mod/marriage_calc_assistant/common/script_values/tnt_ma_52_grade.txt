@@ -1,0 +1,486 @@
+﻿########################################################################
+# Marriage Calculation Assistant 3.0 (component adapter ABI 2.1)
+#
+# Pure, GUI-evaluated candidate scores. Nothing in this file writes a
+# persistent variable. The public GUI wrappers normalise their context into
+# the four historical temporary scopes, then call the component values.
+#
+# Public display contract:
+#   root                       candidate
+#   scope:tnt_gr_me            local player (normalised from GUI scope:actor)
+#   scope:tnt_gr_p             other arranger (provided by GUI for P;
+#                              resolved from root.matchmaker for R)
+#   scope:tnt_gr_side          household owner (normalised here)
+#   scope:tnt_sp_one           candidate (normalised here)
+#
+# Higher is better for the player in both columns. These are one-sided
+# candidate grades, not a separable marriage/deal price.
+########################################################################
+
+
+########################################################################
+# Availability
+########################################################################
+
+tnt_ma_grade_p_available_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = scope:tnt_gr_p
+			scope:actor != scope:tnt_gr_p
+		}
+		value = 1
+	}
+}
+
+tnt_ma_grade_r_available_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = matchmaker
+			matchmaker != scope:actor
+		}
+		value = 1
+	}
+}
+
+
+########################################################################
+# Retired 1.x/2.x components: compatibility names only, never added to scores.
+# Acceptance willingness, opinion, court position and release reluctance are
+# not candidate gameplay benefit. The old asymmetric dynasty/age/liege model
+# is also retired; the shared potential components below replace it.
+########################################################################
+
+tnt_ma_sg_r_c1_value = { value = 0 }
+tnt_ma_sg_r_c2_value = { value = 0 }
+tnt_ma_sg_r_c3_value = { value = 0 }
+tnt_ma_sg_r_c4_value = { value = 0 }
+tnt_ma_sg_p_c1_value = { value = 0 }
+tnt_ma_sg_p_c2_value = { value = 0 }
+tnt_ma_sg_p_c3_value = { value = 0 }
+tnt_ma_sg_p_c4_value = { value = 0 }
+
+
+########################################################################
+# Shared candidate gameplay potential (same sign and weights on P and R).
+# These designer points compare public opportunities, not exact net payoff.
+# Skills: baseline general spouse assistance scale, without assuming that the
+# candidate will actually hold the spouse council position or a specific task.
+########################################################################
+
+tnt_ma_skill_value = {
+	value = 0
+	if = {
+		limit = { effective_age >= 16 is_incapable = no }
+		add = { value = diplomacy divide = 5 floor = yes min = 1 }
+		add = { value = martial divide = 5 floor = yes min = 1 }
+		add = { value = stewardship divide = 5 floor = yes min = 1 }
+		add = { value = intrigue divide = 5 floor = yes min = 1 }
+		add = { value = learning divide = 5 floor = yes min = 1 }
+	}
+	max = 30
+}
+
+# Age opportunity only: 20 times the public age-fertility multiplier, rounded.
+# Not pregnancy probability: no hidden fertility, health or other-spouse data.
+# Fecund extends the public female cutoff by five years, not every age band.
+# Infertile is NOT an absolute vanilla fertility prohibition (already in G).
+tnt_ma_age_value = {
+	value = 0
+	if = {
+		limit = {
+			effective_age >= 16
+			is_incapable = no
+			NOR = {
+				has_trait = eunuch_1
+				has_trait = beardless_eunuch
+				has_trait = celibate
+			}
+		}
+		if = {
+			limit = { is_female = yes }
+			if = { limit = { effective_age <= 25 } value = 20 }
+			else_if = { limit = { effective_age <= 30 } value = 18 }
+			else_if = { limit = { effective_age <= 35 } value = 14 }
+			else_if = { limit = { effective_age <= 40 } value = 10 }
+			else_if = { limit = { effective_age <= 45 } value = 7 }
+			else_if = { limit = { effective_age <= 50 has_trait = fecund } value = 2 }
+		}
+		else = {
+			if = { limit = { effective_age <= 35 } value = 20 }
+			else_if = { limit = { effective_age <= 40 } value = 18 }
+			else_if = { limit = { effective_age <= 50 } value = 16 }
+			else_if = { limit = { effective_age <= 60 } value = 14 }
+			else_if = { limit = { effective_age <= 70 } value = 12 }
+			else = { value = 10 }
+		}
+	}
+}
+
+# Public dynasty marriage-prestige table {-100,0,100,...900} / 20.
+# This is pedigree potential, NOT the actual selected pair's prestige reward;
+# rank, doctrines (including polygamy) and the other spouse are not solved.
+tnt_ma_dynasty_value = {
+	value = -5
+	if = {
+		limit = { has_dynasty = yes }
+		value = dynasty.dynasty_prestige_level
+		subtract = 1
+		multiply = 5
+	}
+	min = -5
+	max = 45
+}
+
+# Strongest explicit claim opportunity, not automatic ownership/inheritance.
+# explicit=yes excludes implicit claims; pressed claims get twice the weight.
+# min is the script-value LOWER bound: retain the greatest seen opportunity.
+# Empire-or-higher includes hegemonies without inflating this 24-point cap.
+tnt_ma_claim_value = {
+	value = 0
+	every_claim = {
+		explicit = yes
+		pressed = no
+		min = {
+			value = 0
+			if = { limit = { tier >= tier_empire } value = 12 }
+			else_if = { limit = { tier = tier_kingdom } value = 8 }
+			else_if = { limit = { tier = tier_duchy } value = 4 }
+			else_if = { limit = { tier = tier_county } value = 2 }
+			else_if = { limit = { tier = tier_barony } value = 1 }
+		}
+	}
+	every_claim = {
+		explicit = yes
+		pressed = yes
+		min = {
+			value = 0
+			if = { limit = { tier >= tier_empire } value = 12 }
+			else_if = { limit = { tier = tier_kingdom } value = 8 }
+			else_if = { limit = { tier = tier_duchy } value = 4 }
+			else_if = { limit = { tier = tier_county } value = 2 }
+			else_if = { limit = { tier = tier_barony } value = 1 }
+			multiply = 2
+		}
+	}
+	max = 24
+}
+
+
+########################################################################
+# Alliance value
+#
+# The GUI decides whether an alliance exists from the marriage window's
+# own CharacterListItem.GetOtherCharacterItems datamodel. These values only
+# price that already-established fact; they never guess family distance.
+########################################################################
+
+tnt_ma_ally_ratio_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:tnt_sp_one
+			exists = scope:tnt_gr_me
+			exists = scope:tnt_gr_p
+			exists = scope:tnt_gr_side
+		}
+		add = {
+			value = scope:tnt_gr_p.max_military_strength
+			divide = {
+				value = scope:tnt_gr_me.current_military_strength
+				min = 1
+			}
+			min = 0
+			max = 2.5
+		}
+	}
+}
+
+tnt_ma_ally_worth_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:tnt_sp_one
+			exists = scope:tnt_gr_me
+			exists = scope:tnt_gr_p
+			exists = scope:tnt_gr_side
+		}
+		add = {
+			value = tnt_ma_ally_ratio_value
+			multiply = tnt_ma_alliance_base_value
+			min = 1
+			max = 100
+		}
+	}
+	round = yes
+}
+
+
+########################################################################
+# Visible inheritable qualities of the candidate
+#
+# Root/ambient scope is the candidate in both raw and GUI callers. The sign
+# is the benefit to the receiving side on BOTH P and R, not an opportunity
+# cost for the household offering the candidate. These are balance weights,
+# not inheritance probabilities or the expected outcome of a particular pair.
+# Only active, explicit traits are read: no recessive genes or parentage.
+# Keep the strongest tier per family/sign, then sum independent qualities.
+########################################################################
+
+tnt_ma_genetic_value = {
+	value = 0
+
+	if = { limit = { has_trait = intellect_good_3 } add = 30 }
+	else_if = { limit = { has_trait = intellect_good_2 } add = 20 }
+	else_if = { limit = { has_trait = intellect_good_1 } add = 10 }
+	if = { limit = { has_trait = intellect_bad_3 } add = -30 }
+	else_if = { limit = { has_trait = intellect_bad_2 } add = -20 }
+	else_if = { limit = { has_trait = intellect_bad_1 } add = -10 }
+
+	if = { limit = { has_trait = beauty_good_3 } add = 30 }
+	else_if = { limit = { has_trait = beauty_good_2 } add = 20 }
+	else_if = { limit = { has_trait = beauty_good_1 } add = 10 }
+	if = { limit = { has_trait = beauty_bad_3 } add = -30 }
+	else_if = { limit = { has_trait = beauty_bad_2 } add = -20 }
+	else_if = { limit = { has_trait = beauty_bad_1 } add = -10 }
+
+	if = { limit = { has_trait = physique_good_3 } add = 30 }
+	else_if = { limit = { has_trait = physique_good_2 } add = 20 }
+	else_if = { limit = { has_trait = physique_good_1 } add = 10 }
+	if = { limit = { has_trait = physique_bad_3 } add = -30 }
+	else_if = { limit = { has_trait = physique_bad_2 } add = -20 }
+	else_if = { limit = { has_trait = physique_bad_1 } add = -10 }
+
+	# Manual inheritance is why pure_blooded/inbred need explicit entries too.
+	if = { limit = { has_trait = pure_blooded } add = 10 }
+	if = { limit = { has_trait = fecund } add = 10 }
+	if = { limit = { has_trait = inbred } add = -50 }
+	if = { limit = { has_trait = bleeder } add = -30 }
+	if = { limit = { has_trait = infertile } add = -50 }
+	if = { limit = { has_trait = spindly } add = -10 }
+	if = { limit = { has_trait = wheezing } add = -10 }
+	if = { limit = { has_trait = clubfooted } add = -10 }
+	if = { limit = { has_trait = hunchbacked } add = -10 }
+	if = { limit = { has_trait = lisping } add = -5 }
+	if = { limit = { has_trait = stuttering } add = -5 }
+}
+
+
+########################################################################
+# Raw totals for legacy callers. Adapter components are aggregated here for
+# arithmetic compatibility; GUI-facing wrappers below add the same components
+# one level deep so their descriptions survive native ValueBreakdown.
+########################################################################
+
+tnt_ma_grade_p_raw_value = {
+	value = 0
+	add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+	add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+	add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+	add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+	add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+	add = tnt_ma_adapter_p_value
+}
+
+tnt_ma_grade_r_raw_value = {
+	value = 0
+	add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+	add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+	add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+	add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+	add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+	add = tnt_ma_adapter_r_value
+}
+
+
+########################################################################
+# GUI-facing wrappers
+########################################################################
+
+tnt_ma_grade_p_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = scope:tnt_gr_p
+			scope:actor != scope:tnt_gr_p
+		}
+		save_temporary_scope_as = tnt_sp_one
+		scope:actor = {
+			save_temporary_scope_as = tnt_gr_me
+			save_temporary_scope_as = tnt_gr_side
+		}
+		add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+		add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+		add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+		add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+		add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+		if = {
+			limit = { tnt_ma_adapter_p_c1_value != 0 }
+			add = { value = tnt_ma_adapter_p_c1_value desc = tnt_ma_adapter_p_c1 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c2_value != 0 }
+			add = { value = tnt_ma_adapter_p_c2_value desc = tnt_ma_adapter_p_c2 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c3_value != 0 }
+			add = { value = tnt_ma_adapter_p_c3_value desc = tnt_ma_adapter_p_c3 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c4_value != 0 }
+			add = { value = tnt_ma_adapter_p_c4_value desc = tnt_ma_adapter_p_c4 }
+		}
+	}
+}
+
+tnt_ma_grade_p_alliance_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = scope:tnt_gr_p
+			scope:actor != scope:tnt_gr_p
+		}
+		save_temporary_scope_as = tnt_sp_one
+		scope:actor = {
+			save_temporary_scope_as = tnt_gr_me
+			save_temporary_scope_as = tnt_gr_side
+		}
+		add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+		add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+		add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+		add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+		add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+		if = {
+			limit = { tnt_ma_adapter_p_c1_value != 0 }
+			add = { value = tnt_ma_adapter_p_c1_value desc = tnt_ma_adapter_p_c1 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c2_value != 0 }
+			add = { value = tnt_ma_adapter_p_c2_value desc = tnt_ma_adapter_p_c2 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c3_value != 0 }
+			add = { value = tnt_ma_adapter_p_c3_value desc = tnt_ma_adapter_p_c3 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_p_c4_value != 0 }
+			add = { value = tnt_ma_adapter_p_c4_value desc = tnt_ma_adapter_p_c4 }
+		}
+		add = { value = tnt_ma_ally_worth_value desc = tnt_ma_grade_alliance }
+	}
+}
+
+tnt_ma_grade_r_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = matchmaker
+			matchmaker != scope:actor
+		}
+		save_temporary_scope_as = tnt_sp_one
+		scope:actor = { save_temporary_scope_as = tnt_gr_me }
+		matchmaker = {
+			save_temporary_scope_as = tnt_gr_p
+			save_temporary_scope_as = tnt_gr_side
+		}
+		add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+		add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+		add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+		add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+		add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+		if = {
+			limit = { tnt_ma_adapter_r_c1_value != 0 }
+			add = { value = tnt_ma_adapter_r_c1_value desc = tnt_ma_adapter_r_c1 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c2_value != 0 }
+			add = { value = tnt_ma_adapter_r_c2_value desc = tnt_ma_adapter_r_c2 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c3_value != 0 }
+			add = { value = tnt_ma_adapter_r_c3_value desc = tnt_ma_adapter_r_c3 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c4_value != 0 }
+			add = { value = tnt_ma_adapter_r_c4_value desc = tnt_ma_adapter_r_c4 }
+		}
+	}
+}
+
+tnt_ma_grade_r_alliance_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:actor
+			exists = matchmaker
+			matchmaker != scope:actor
+		}
+		save_temporary_scope_as = tnt_sp_one
+		scope:actor = { save_temporary_scope_as = tnt_gr_me }
+		matchmaker = {
+			save_temporary_scope_as = tnt_gr_p
+			save_temporary_scope_as = tnt_gr_side
+		}
+		add = { value = tnt_ma_skill_value desc = tnt_ma_grade_skill }
+		add = { value = tnt_ma_age_value desc = tnt_ma_grade_age }
+		add = { value = tnt_ma_dynasty_value desc = tnt_ma_grade_dynasty }
+		add = { value = tnt_ma_claim_value desc = tnt_ma_grade_claim }
+		add = { value = tnt_ma_genetic_value desc = tnt_ma_grade_genetic }
+		if = {
+			limit = { tnt_ma_adapter_r_c1_value != 0 }
+			add = { value = tnt_ma_adapter_r_c1_value desc = tnt_ma_adapter_r_c1 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c2_value != 0 }
+			add = { value = tnt_ma_adapter_r_c2_value desc = tnt_ma_adapter_r_c2 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c3_value != 0 }
+			add = { value = tnt_ma_adapter_r_c3_value desc = tnt_ma_adapter_r_c3 }
+		}
+		if = {
+			limit = { tnt_ma_adapter_r_c4_value != 0 }
+			add = { value = tnt_ma_adapter_r_c4_value desc = tnt_ma_adapter_r_c4 }
+		}
+		add = { value = tnt_ma_ally_worth_value desc = tnt_ma_grade_alliance }
+	}
+}
+
+
+########################################################################
+# Deprecated compatibility wrapper for callers that already provide all
+# four historical temporary scopes. The raw calculation is evaluated inside
+# tnt_sp_one so adapter values still receive root=candidate even if the legacy
+# caller's ambient root differs. It deliberately excludes the alliance,
+# because alliance existence is now supplied by the C++ GUI datamodel.
+########################################################################
+
+tnt_spouse_grade_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:tnt_sp_one
+			exists = scope:tnt_gr_me
+			exists = scope:tnt_gr_p
+			exists = scope:tnt_gr_side
+			scope:tnt_gr_side ?= { this = scope:tnt_gr_me }
+		}
+		scope:tnt_sp_one = { add = tnt_ma_grade_p_raw_value }
+	}
+	else_if = {
+		limit = {
+			exists = scope:tnt_sp_one
+			exists = scope:tnt_gr_me
+			exists = scope:tnt_gr_p
+			exists = scope:tnt_gr_side
+			scope:tnt_gr_side ?= { this = scope:tnt_gr_p }
+		}
+		scope:tnt_sp_one = { add = tnt_ma_grade_r_raw_value }
+	}
+}

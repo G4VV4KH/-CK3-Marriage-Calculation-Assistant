@@ -1,0 +1,460 @@
+﻿# MCA native marriage-list score sorting.
+# Start/context/finalize/clear are player-rooted; collect is candidate-rooted
+# and receives scope:actor = player. All persistent writes target the player.
+# This is SAVEABLE snapshot state, not transient engine memory. GUI lifecycle,
+# context and identity guards must clear it; candidates are never stamped.
+# Capture reuses the displayed grade values plus native alliance metadata.
+# Packed key = (rounded score + 10000) * 10000 + 9999 - native index.
+# Sort descending by score; equal scores preserve native order. Every key
+# round-trips exactly before capture. Three ordered passes validate indices
+# and build sorted/native-index views without per-row membership scans.
+# Candidate references remain in validated callback order: direction +1/-1
+# maps native indices into that list. Non-monotonic capture fails closed.
+# Decode by subtracting the integer remainder before division.
+
+tnt_ma_sort_start = {
+	scope = character
+	saved_scopes = { tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	is_valid = { is_ai = no }
+	effect = {
+		if = { limit = { has_variable_list = tnt_ma_sort_seen } clear_variable_list = tnt_ma_sort_seen }
+		if = { limit = { has_variable_list = tnt_ma_sort_packed } clear_variable_list = tnt_ma_sort_packed }
+		if = { limit = { has_variable_list = tnt_ma_sort_indices } clear_variable_list = tnt_ma_sort_indices }
+		if = { limit = { has_variable_list = tnt_ma_sort_keys } clear_variable_list = tnt_ma_sort_keys }
+		if = { limit = { has_variable_list = tnt_ma_sort_keys_by_index } clear_variable_list = tnt_ma_sort_keys_by_index }
+		if = { limit = { has_variable_list = tnt_ma_sort_candidates } clear_variable_list = tnt_ma_sort_candidates }
+		if = { limit = { has_variable = tnt_ma_sort_direction } remove_variable = tnt_ma_sort_direction }
+		if = { limit = { has_variable = tnt_ma_sort_partner } remove_variable = tnt_ma_sort_partner }
+		if = { limit = { has_variable = tnt_ma_sort_secondary_actor } remove_variable = tnt_ma_sort_secondary_actor }
+		if = { limit = { has_variable = tnt_ma_sort_secondary_recipient } remove_variable = tnt_ma_sort_secondary_recipient }
+		if = { limit = { has_variable = tnt_ma_sort_side } remove_variable = tnt_ma_sort_side }
+		if = { limit = { has_variable = tnt_ma_sort_matrilineal } remove_variable = tnt_ma_sort_matrilineal }
+		if = { limit = { has_variable = tnt_ma_sort_day } remove_variable = tnt_ma_sort_day }
+		if = { limit = { has_variable = tnt_ma_sort_cursor } remove_variable = tnt_ma_sort_cursor }
+		if = { limit = { has_variable = tnt_ma_sort_output_count } remove_variable = tnt_ma_sort_output_count }
+		set_variable = { name = tnt_ma_sort_state value = 3 }
+		set_variable = { name = tnt_ma_sort_expected value = 0 }
+		set_variable = { name = tnt_ma_sort_received value = 0 }
+		if = {
+			limit = {
+				exists = scope:tnt_ma_sort_n
+				exists = scope:tnt_ma_sort_side
+				exists = scope:tnt_ma_sort_matrilineal
+				exists = scope:tnt_ma_sort_day
+				scope:tnt_ma_sort_n > 0
+				scope:tnt_ma_sort_n < 10000
+				OR = { scope:tnt_ma_sort_side = 1 scope:tnt_ma_sort_side = 2 }
+				OR = { scope:tnt_ma_sort_matrilineal = 0 scope:tnt_ma_sort_matrilineal = 1 }
+			}
+			save_scope_value_as = { name = tnt_ma_sort_integer_n value = { value = scope:tnt_ma_sort_n floor = yes } }
+			if = {
+				limit = { scope:tnt_ma_sort_n = scope:tnt_ma_sort_integer_n }
+				set_variable = { name = tnt_ma_sort_expected value = scope:tnt_ma_sort_n }
+				if = {
+					limit = { exists = scope:tnt_ma_sort_partner }
+					set_variable = { name = tnt_ma_sort_partner value = scope:tnt_ma_sort_partner }
+				}
+				if = {
+					limit = { exists = scope:tnt_ma_sort_secondary_actor }
+					set_variable = { name = tnt_ma_sort_secondary_actor value = scope:tnt_ma_sort_secondary_actor }
+				}
+				if = {
+					limit = { exists = scope:tnt_ma_sort_secondary_recipient }
+					set_variable = { name = tnt_ma_sort_secondary_recipient value = scope:tnt_ma_sort_secondary_recipient }
+				}
+				set_variable = { name = tnt_ma_sort_side value = scope:tnt_ma_sort_side }
+				set_variable = { name = tnt_ma_sort_matrilineal value = scope:tnt_ma_sort_matrilineal }
+				set_variable = { name = tnt_ma_sort_day value = scope:tnt_ma_sort_day }
+				set_variable = { name = tnt_ma_sort_state value = 1 }
+			}
+		}
+	}
+}
+
+# Read-only. GUI passes fresh context, never trusts unguarded Var.Char while idle.
+tnt_ma_sort_context_valid = {
+	scope = character
+	saved_scopes = { tnt_ma_sort_n tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	is_valid = {
+		has_variable = tnt_ma_sort_state
+		OR = { var:tnt_ma_sort_state = 1 var:tnt_ma_sort_state = 2 }
+		exists = scope:tnt_ma_sort_n
+		exists = scope:tnt_ma_sort_side
+		exists = scope:tnt_ma_sort_matrilineal
+		exists = scope:tnt_ma_sort_day
+		has_variable = tnt_ma_sort_expected
+		has_variable = tnt_ma_sort_side
+		has_variable = tnt_ma_sort_matrilineal
+		has_variable = tnt_ma_sort_day
+		var:tnt_ma_sort_expected = scope:tnt_ma_sort_n
+		OR = {
+			AND = {
+				NOT = { exists = scope:tnt_ma_sort_partner }
+				NOT = { exists = var:tnt_ma_sort_partner }
+			}
+			AND = {
+				exists = scope:tnt_ma_sort_partner
+				exists = var:tnt_ma_sort_partner
+				var:tnt_ma_sort_partner = { this = scope:tnt_ma_sort_partner }
+			}
+		}
+		var:tnt_ma_sort_side = scope:tnt_ma_sort_side
+		var:tnt_ma_sort_matrilineal = scope:tnt_ma_sort_matrilineal
+		var:tnt_ma_sort_day = scope:tnt_ma_sort_day
+		OR = {
+			AND = {
+				NOT = { exists = scope:tnt_ma_sort_secondary_actor }
+				NOT = { exists = var:tnt_ma_sort_secondary_actor }
+			}
+			AND = {
+				exists = scope:tnt_ma_sort_secondary_actor
+				exists = var:tnt_ma_sort_secondary_actor
+				var:tnt_ma_sort_secondary_actor = { this = scope:tnt_ma_sort_secondary_actor }
+			}
+		}
+		OR = {
+			AND = {
+				NOT = { exists = scope:tnt_ma_sort_secondary_recipient }
+				NOT = { exists = var:tnt_ma_sort_secondary_recipient }
+			}
+			AND = {
+				exists = scope:tnt_ma_sort_secondary_recipient
+				exists = var:tnt_ma_sort_secondary_recipient
+				var:tnt_ma_sort_secondary_recipient = { this = scope:tnt_ma_sort_secondary_recipient }
+			}
+		}
+	}
+}
+
+tnt_ma_sort_collect = {
+	scope = character
+	saved_scopes = { actor tnt_ma_sort_n tnt_ma_sort_index tnt_ma_sort_alliance tnt_ma_sort_partner tnt_ma_sort_secondary_actor tnt_ma_sort_secondary_recipient tnt_ma_sort_side tnt_ma_sort_matrilineal tnt_ma_sort_day }
+	# Every authorization and stale-callback gate is inside the effect body.
+	# GUI root and ambient scope are candidate; actor is the snapshot owner.
+	effect = {
+		save_temporary_scope_as = tnt_ma_sort_candidate
+		if = {
+			limit = {
+				exists = scope:actor
+				scope:actor = {
+					is_ai = no
+					has_variable = tnt_ma_sort_state
+					has_variable = tnt_ma_sort_expected
+					has_variable = tnt_ma_sort_received
+					var:tnt_ma_sort_state = 1
+					var:tnt_ma_sort_received < var:tnt_ma_sort_expected
+				}
+			}
+			# Compute while BOTH root and ambient scope are still candidate.
+			# A temporary P partner does not shadow the R wrapper's matchmaker.
+			save_scope_value_as = { name = tnt_ma_sort_score value = -10000 }
+			if = {
+				limit = { exists = scope:tnt_ma_sort_side scope:tnt_ma_sort_side = 1 }
+				if = {
+					limit = { exists = scope:tnt_ma_sort_partner }
+					scope:tnt_ma_sort_partner = { save_temporary_scope_as = tnt_gr_p }
+				}
+				if = {
+					limit = { exists = scope:tnt_ma_sort_alliance scope:tnt_ma_sort_alliance = 1 }
+					save_scope_value_as = { name = tnt_ma_sort_score value = tnt_ma_sort_p_alliance_capture_value }
+				}
+				else = { save_scope_value_as = { name = tnt_ma_sort_score value = tnt_ma_sort_p_capture_value } }
+			}
+			else_if = {
+				limit = { exists = scope:tnt_ma_sort_side scope:tnt_ma_sort_side = 2 }
+				if = {
+					limit = { exists = scope:tnt_ma_sort_alliance scope:tnt_ma_sort_alliance = 1 }
+					save_scope_value_as = { name = tnt_ma_sort_score value = tnt_ma_sort_r_alliance_capture_value }
+				}
+				else = { save_scope_value_as = { name = tnt_ma_sort_score value = tnt_ma_sort_r_capture_value } }
+			}
+			scope:actor = {
+				# Execute can bypass is_valid: late callbacks after clear/ready are no-ops.
+				if = {
+					limit = {
+						has_variable = tnt_ma_sort_state
+						has_variable = tnt_ma_sort_expected
+						has_variable = tnt_ma_sort_received
+						var:tnt_ma_sort_state = 1
+						var:tnt_ma_sort_received < var:tnt_ma_sort_expected
+					}
+					if = {
+						limit = {
+							var:tnt_ma_sort_state = 1
+							exists = scope:tnt_ma_sort_n
+							exists = scope:tnt_ma_sort_index
+							exists = scope:tnt_ma_sort_score
+							exists = scope:tnt_ma_sort_alliance
+							OR = { scope:tnt_ma_sort_alliance = 0 scope:tnt_ma_sort_alliance = 1 }
+							exists = scope:tnt_ma_sort_candidate
+							scope:tnt_ma_sort_candidate = { is_alive = yes }
+							var:tnt_ma_sort_expected = scope:tnt_ma_sort_n
+							var:tnt_ma_sort_side = scope:tnt_ma_sort_side
+							var:tnt_ma_sort_matrilineal = scope:tnt_ma_sort_matrilineal
+							var:tnt_ma_sort_day = scope:tnt_ma_sort_day
+							OR = {
+								AND = { NOT = { exists = scope:tnt_ma_sort_partner } NOT = { exists = var:tnt_ma_sort_partner } }
+								AND = {
+									exists = scope:tnt_ma_sort_partner
+									exists = var:tnt_ma_sort_partner
+									var:tnt_ma_sort_partner = { this = scope:tnt_ma_sort_partner }
+								}
+							}
+							OR = {
+								AND = { NOT = { exists = scope:tnt_ma_sort_secondary_actor } NOT = { exists = var:tnt_ma_sort_secondary_actor } }
+								AND = {
+									exists = scope:tnt_ma_sort_secondary_actor
+									exists = var:tnt_ma_sort_secondary_actor
+									var:tnt_ma_sort_secondary_actor = { this = scope:tnt_ma_sort_secondary_actor }
+								}
+							}
+							OR = {
+								AND = { NOT = { exists = scope:tnt_ma_sort_secondary_recipient } NOT = { exists = var:tnt_ma_sort_secondary_recipient } }
+								AND = {
+									exists = scope:tnt_ma_sort_secondary_recipient
+									exists = var:tnt_ma_sort_secondary_recipient
+									var:tnt_ma_sort_secondary_recipient = { this = scope:tnt_ma_sort_secondary_recipient }
+								}
+							}
+							var:tnt_ma_sort_received < var:tnt_ma_sort_expected
+							scope:tnt_ma_sort_index >= 0
+							scope:tnt_ma_sort_index < var:tnt_ma_sort_expected
+							scope:tnt_ma_sort_score >= -10000
+							scope:tnt_ma_sort_score <= 10000
+						}
+						save_scope_value_as = { name = tnt_ma_sort_integer_index value = { value = scope:tnt_ma_sort_index floor = yes } }
+						save_scope_value_as = { name = tnt_ma_sort_integer_score value = { value = scope:tnt_ma_sort_score round = yes } }
+						save_scope_value_as = {
+							name = tnt_ma_sort_key
+							value = {
+								value = scope:tnt_ma_sort_integer_score
+								add = 10000
+								multiply = 10000
+								add = 9999
+								subtract = scope:tnt_ma_sort_integer_index
+							}
+						}
+						save_scope_value_as = {
+							name = tnt_ma_sort_decoded_index
+							value = {
+								value = scope:tnt_ma_sort_key
+								modulo = 10000
+								multiply = -1
+								add = 9999
+							}
+						}
+						save_scope_value_as = {
+							name = tnt_ma_sort_decoded_score
+							value = {
+								value = scope:tnt_ma_sort_key
+								subtract = { value = scope:tnt_ma_sort_key modulo = 10000 }
+								divide = 10000
+								subtract = 10000
+							}
+						}
+						if = {
+							limit = {
+								scope:tnt_ma_sort_index = scope:tnt_ma_sort_integer_index
+								scope:tnt_ma_sort_decoded_index = scope:tnt_ma_sort_index
+								scope:tnt_ma_sort_decoded_score = scope:tnt_ma_sort_integer_score
+							}
+							if = {
+								limit = { var:tnt_ma_sort_received = 0 }
+								if = {
+									limit = { scope:tnt_ma_sort_index = 0 }
+									set_variable = { name = tnt_ma_sort_direction value = 1 }
+								}
+								else = {
+									save_scope_value_as = { name = tnt_ma_sort_last_index value = { value = var:tnt_ma_sort_expected subtract = 1 } }
+									if = {
+										limit = { scope:tnt_ma_sort_index = scope:tnt_ma_sort_last_index }
+										set_variable = { name = tnt_ma_sort_direction value = -1 }
+									}
+									else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+								}
+							}
+							save_scope_value_as = { name = tnt_ma_sort_sequence_index value = var:tnt_ma_sort_received }
+							if = {
+								limit = { has_variable = tnt_ma_sort_direction var:tnt_ma_sort_direction = -1 }
+								save_scope_value_as = {
+									name = tnt_ma_sort_sequence_index
+									value = { value = var:tnt_ma_sort_expected subtract = 1 subtract = var:tnt_ma_sort_received }
+								}
+							}
+							if = {
+								limit = {
+									var:tnt_ma_sort_state = 1
+									has_variable = tnt_ma_sort_direction
+									OR = { var:tnt_ma_sort_direction = 1 var:tnt_ma_sort_direction = -1 }
+									scope:tnt_ma_sort_index = scope:tnt_ma_sort_sequence_index
+								}
+								add_to_variable_list = { name = tnt_ma_sort_seen target = scope:tnt_ma_sort_integer_index }
+								add_to_variable_list = { name = tnt_ma_sort_packed target = scope:tnt_ma_sort_key }
+								add_to_variable_list = { name = tnt_ma_sort_candidates target = scope:tnt_ma_sort_candidate }
+								change_variable = { name = tnt_ma_sort_received add = 1 }
+							}
+							else = {
+								set_variable = { name = tnt_ma_sort_state value = 3 }
+							}
+						}
+						else = {
+							set_variable = { name = tnt_ma_sort_state value = 3 }
+						}
+					}
+					else = {
+						set_variable = { name = tnt_ma_sort_state value = 3 }
+					}
+				}
+				# Fail closed immediately: never retain partially captured candidates.
+				# The GUI failure controller then invokes full context cleanup.
+				if = {
+					limit = { has_variable = tnt_ma_sort_state var:tnt_ma_sort_state = 3 }
+					if = { limit = { has_variable_list = tnt_ma_sort_seen } clear_variable_list = tnt_ma_sort_seen }
+					if = { limit = { has_variable_list = tnt_ma_sort_packed } clear_variable_list = tnt_ma_sort_packed }
+					if = { limit = { has_variable_list = tnt_ma_sort_indices } clear_variable_list = tnt_ma_sort_indices }
+					if = { limit = { has_variable_list = tnt_ma_sort_keys } clear_variable_list = tnt_ma_sort_keys }
+					if = { limit = { has_variable_list = tnt_ma_sort_keys_by_index } clear_variable_list = tnt_ma_sort_keys_by_index }
+					if = { limit = { has_variable_list = tnt_ma_sort_candidates } clear_variable_list = tnt_ma_sort_candidates }
+					if = { limit = { has_variable = tnt_ma_sort_direction } remove_variable = tnt_ma_sort_direction }
+				}
+			}
+		}
+	}
+}
+
+tnt_ma_sort_finalize = {
+	scope = character
+	is_valid = {
+		is_ai = no
+		has_variable = tnt_ma_sort_state
+		var:tnt_ma_sort_state = 1
+	}
+	effect = {
+		# Repeated/deferred finalize must not erase an already-ready snapshot.
+		if = {
+			limit = {
+				has_variable = tnt_ma_sort_state
+				has_variable = tnt_ma_sort_expected
+				has_variable = tnt_ma_sort_received
+				var:tnt_ma_sort_state = 1
+			}
+			if = {
+				limit = {
+					var:tnt_ma_sort_expected > 0
+					var:tnt_ma_sort_received = var:tnt_ma_sort_expected
+					variable_list_size = { name = tnt_ma_sort_seen value = var:tnt_ma_sort_expected }
+					variable_list_size = { name = tnt_ma_sort_packed value = var:tnt_ma_sort_expected }
+					variable_list_size = { name = tnt_ma_sort_candidates value = var:tnt_ma_sort_expected }
+					has_variable = tnt_ma_sort_direction
+					OR = { var:tnt_ma_sort_direction = 1 var:tnt_ma_sort_direction = -1 }
+				}
+				set_variable = { name = tnt_ma_sort_cursor value = { value = var:tnt_ma_sort_expected subtract = 1 } }
+				ordered_in_list = {
+					variable = tnt_ma_sort_seen
+					order_by = { save_temporary_scope_as = tnt_ma_sort_order_key value = scope:tnt_ma_sort_order_key }
+					max = var:tnt_ma_sort_expected
+					check_range_bounds = no
+					save_temporary_scope_as = tnt_ma_sort_item
+					root = {
+						if = {
+							limit = { scope:tnt_ma_sort_item = var:tnt_ma_sort_cursor }
+							change_variable = { name = tnt_ma_sort_cursor subtract = 1 }
+						}
+						else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+					}
+				}
+				if = {
+					limit = { var:tnt_ma_sort_state = 1 var:tnt_ma_sort_cursor = -1 }
+					set_variable = { name = tnt_ma_sort_output_count value = 0 }
+					ordered_in_list = {
+						variable = tnt_ma_sort_packed
+						order_by = { save_temporary_scope_as = tnt_ma_sort_order_key value = scope:tnt_ma_sort_order_key }
+						max = var:tnt_ma_sort_expected
+						check_range_bounds = no
+						save_temporary_scope_as = tnt_ma_sort_item
+						root = {
+							save_scope_value_as = {
+								name = tnt_ma_sort_output_index
+								value = { value = scope:tnt_ma_sort_item modulo = 10000 multiply = -1 add = 9999 }
+							}
+							add_to_variable_list = { name = tnt_ma_sort_indices target = scope:tnt_ma_sort_output_index }
+							add_to_variable_list = { name = tnt_ma_sort_keys target = scope:tnt_ma_sort_item }
+							change_variable = { name = tnt_ma_sort_output_count add = 1 }
+						}
+					}
+					# Parallel score packets in native-index order for fresh-score guards.
+					set_variable = { name = tnt_ma_sort_output_count value = 0 }
+					ordered_in_list = {
+						variable = tnt_ma_sort_packed
+						order_by = { save_temporary_scope_as = tnt_ma_sort_order_key value = scope:tnt_ma_sort_order_key modulo = 10000 }
+						max = var:tnt_ma_sort_expected
+						check_range_bounds = no
+						save_temporary_scope_as = tnt_ma_sort_item
+						root = {
+							save_scope_value_as = { name = tnt_ma_sort_output_index value = { value = scope:tnt_ma_sort_item modulo = 10000 multiply = -1 add = 9999 } }
+							if = {
+								limit = { scope:tnt_ma_sort_output_index = var:tnt_ma_sort_output_count }
+								add_to_variable_list = { name = tnt_ma_sort_keys_by_index target = scope:tnt_ma_sort_item }
+							}
+							else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+							change_variable = { name = tnt_ma_sort_output_count add = 1 }
+						}
+					}
+					if = {
+						limit = {
+							var:tnt_ma_sort_state = 1
+							var:tnt_ma_sort_output_count = var:tnt_ma_sort_expected
+							variable_list_size = { name = tnt_ma_sort_indices value = var:tnt_ma_sort_expected }
+							variable_list_size = { name = tnt_ma_sort_keys value = var:tnt_ma_sort_expected }
+							variable_list_size = { name = tnt_ma_sort_keys_by_index value = var:tnt_ma_sort_expected }
+							variable_list_size = { name = tnt_ma_sort_candidates value = var:tnt_ma_sort_expected }
+							has_variable = tnt_ma_sort_direction
+							OR = { var:tnt_ma_sort_direction = 1 var:tnt_ma_sort_direction = -1 }
+						}
+						set_variable = { name = tnt_ma_sort_state value = 2 }
+					}
+					else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+				}
+				else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+			}
+			else = { set_variable = { name = tnt_ma_sort_state value = 3 } }
+			if = {
+				limit = { var:tnt_ma_sort_state = 3 }
+				if = { limit = { has_variable_list = tnt_ma_sort_indices } clear_variable_list = tnt_ma_sort_indices }
+				if = { limit = { has_variable_list = tnt_ma_sort_keys } clear_variable_list = tnt_ma_sort_keys }
+				if = { limit = { has_variable_list = tnt_ma_sort_keys_by_index } clear_variable_list = tnt_ma_sort_keys_by_index }
+				if = { limit = { has_variable_list = tnt_ma_sort_candidates } clear_variable_list = tnt_ma_sort_candidates }
+				if = { limit = { has_variable = tnt_ma_sort_direction } remove_variable = tnt_ma_sort_direction }
+			}
+			if = { limit = { has_variable_list = tnt_ma_sort_seen } clear_variable_list = tnt_ma_sort_seen }
+			if = { limit = { has_variable_list = tnt_ma_sort_packed } clear_variable_list = tnt_ma_sort_packed }
+			if = { limit = { has_variable = tnt_ma_sort_cursor } remove_variable = tnt_ma_sort_cursor }
+			if = { limit = { has_variable = tnt_ma_sort_output_count } remove_variable = tnt_ma_sort_output_count }
+		}
+	}
+}
+
+tnt_ma_sort_clear = {
+	scope = character
+	is_valid = { is_ai = no }
+	effect = {
+		if = { limit = { has_variable_list = tnt_ma_sort_seen } clear_variable_list = tnt_ma_sort_seen }
+		if = { limit = { has_variable_list = tnt_ma_sort_packed } clear_variable_list = tnt_ma_sort_packed }
+		if = { limit = { has_variable_list = tnt_ma_sort_indices } clear_variable_list = tnt_ma_sort_indices }
+		if = { limit = { has_variable_list = tnt_ma_sort_keys } clear_variable_list = tnt_ma_sort_keys }
+		if = { limit = { has_variable_list = tnt_ma_sort_keys_by_index } clear_variable_list = tnt_ma_sort_keys_by_index }
+		if = { limit = { has_variable_list = tnt_ma_sort_candidates } clear_variable_list = tnt_ma_sort_candidates }
+		if = { limit = { has_variable = tnt_ma_sort_direction } remove_variable = tnt_ma_sort_direction }
+		if = { limit = { has_variable = tnt_ma_sort_state } remove_variable = tnt_ma_sort_state }
+		if = { limit = { has_variable = tnt_ma_sort_expected } remove_variable = tnt_ma_sort_expected }
+		if = { limit = { has_variable = tnt_ma_sort_received } remove_variable = tnt_ma_sort_received }
+		if = { limit = { has_variable = tnt_ma_sort_partner } remove_variable = tnt_ma_sort_partner }
+		if = { limit = { has_variable = tnt_ma_sort_secondary_actor } remove_variable = tnt_ma_sort_secondary_actor }
+		if = { limit = { has_variable = tnt_ma_sort_secondary_recipient } remove_variable = tnt_ma_sort_secondary_recipient }
+		if = { limit = { has_variable = tnt_ma_sort_side } remove_variable = tnt_ma_sort_side }
+		if = { limit = { has_variable = tnt_ma_sort_matrilineal } remove_variable = tnt_ma_sort_matrilineal }
+		if = { limit = { has_variable = tnt_ma_sort_day } remove_variable = tnt_ma_sort_day }
+		if = { limit = { has_variable = tnt_ma_sort_cursor } remove_variable = tnt_ma_sort_cursor }
+		if = { limit = { has_variable = tnt_ma_sort_output_count } remove_variable = tnt_ma_sort_output_count }
+	}
+}

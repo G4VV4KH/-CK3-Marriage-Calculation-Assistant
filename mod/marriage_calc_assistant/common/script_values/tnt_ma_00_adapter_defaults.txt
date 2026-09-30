@@ -1,0 +1,44 @@
+﻿########################################################################
+# Marriage Calculation Assistant 3.0.1 - component adapter ABI 2.1
+#
+# Total-conversion adapters may intentionally override the eight component
+# slots below in a script-value file that sorts after this one. Components are
+# signed deltas (higher is better for the player), deterministic integers, and
+# must not write persistent state. The two aggregate values are core-owned and
+# retained for raw/legacy callers; GUI wrappers add components one level deep
+# so native ValueBreakdown preserves every adapter-owned description.
+# Keep overridable component slots as FORMULAS, even when zero. In CK3 1.19,
+# replacing the former scalar stubs with these zero formulas restored AGOT's
+# nonzero component in both picker sides. The runtime test establishes this
+# binding fix, not the engine's internal duplicate-resolution implementation.
+########################################################################
+
+tnt_ma_adapter_p_c1_value = { value = 0 }
+tnt_ma_adapter_p_c2_value = { value = 0 }
+tnt_ma_adapter_p_c3_value = { value = 0 }
+tnt_ma_adapter_p_c4_value = { value = 0 }
+
+tnt_ma_adapter_r_c1_value = { value = 0 }
+tnt_ma_adapter_r_c2_value = { value = 0 }
+tnt_ma_adapter_r_c3_value = { value = 0 }
+tnt_ma_adapter_r_c4_value = { value = 0 }
+
+tnt_ma_adapter_p_value = {
+	value = 0
+	add = tnt_ma_adapter_p_c1_value
+	add = tnt_ma_adapter_p_c2_value
+	add = tnt_ma_adapter_p_c3_value
+	add = tnt_ma_adapter_p_c4_value
+}
+
+tnt_ma_adapter_r_value = {
+	value = 0
+	add = tnt_ma_adapter_r_c1_value
+	add = tnt_ma_adapter_r_c2_value
+	add = tnt_ma_adapter_r_c3_value
+	add = tnt_ma_adapter_r_c4_value
+}
+
+# MCA designer calibration: 40 points at military parity, not AI acceptance.
+# Adapters may recalibrate; the alliance component always caps at 100 points.
+tnt_ma_alliance_base_value = 40

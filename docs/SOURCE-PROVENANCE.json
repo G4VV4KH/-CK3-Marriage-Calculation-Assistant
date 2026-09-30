@@ -1,0 +1,8 @@
+{
+  "original_source": "C:/Users/Pavel/Documents/ChatGPT/ck3-mods",
+  "original_head": "e8a98707777829b1cdc854f8c9934e685e3d9400",
+  "baseline": "2026-09-30 checked-build local snapshot",
+  "runtime_source_unchanged": true,
+  "history_backup": "External backup-storage/2026-09-30-pre-release/*.bundle",
+  "note": "Independent publication repository initialized from verified current files; old history remains in local bundles rather than importing unrelated sibling-mod branches."
+}

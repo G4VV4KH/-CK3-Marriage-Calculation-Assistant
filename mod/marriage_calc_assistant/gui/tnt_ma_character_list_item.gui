@@ -1,0 +1,154 @@
+########################################################################
+# Marriage Calculation Assistant 2.3
+#
+# A derived marriage-only row. The vanilla/TC widget_character_list_item is
+# left untouched; this type inherits whichever implementation the active
+# playset supplies and uses its character_relation block for a readable
+# live score beside age/health, followed by the native relationship text.
+# The marriage window uses this for native, sorted and pinned-player rows.
+########################################################################
+
+types TntMarriageAssistant
+{
+	type tnt_ma_widget_character_list_item = widget_character_list_item {
+		blockoverride "character_relation" {
+			hbox = {
+				name = "tnt_ma_grade_and_relation"
+				ignoreinvisible = yes
+				layoutpolicy_horizontal = expanding
+				min_height = 26
+				# Only the marriage window instantiates this row. Use its actor and
+				# picker side directly; translated role labels require loc scopes.
+				# Stay inside the existing name/age column, away from the scrollbar.
+				# The native relation takes the remaining width without moving skills.
+
+				# One fixed footprint; four exclusive owners overlap inside it.
+				widget = {
+					name = "tnt_ma_grade_carrier"
+					size = { 126 26 }
+					min_width = 126
+					max_width = 126
+					min_height = 26
+					max_height = 26
+
+					# Player-side candidate, without a potential alliance.
+					text_single = {
+						name = "tnt_ma_grade_p"
+						position = { 6 0 }
+						min_width = 112
+						max_width = 112
+						autoresize = no
+						align = left|nobaseline
+						using = Font_Size_Medium
+						size = { 112 26 }
+						min_height = 26
+						max_height = 26
+						alwaystransparent = no
+						datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_p_value')]"
+						raw_text = "#low MCA#! [GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue('tnt_ma_grade_p_value')|+=0]"
+						visible = "[And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), MatchmakerInteractionWindow.IsPickingSecondaryActor ), And( GreaterThan_CFixedPoint( GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue('tnt_ma_grade_p_available_value'), '(CFixedPoint)0' ), Not( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ) ) ) )]"
+						using = tooltip_ne
+						tooltipwidget = {
+							widget_value_breakdown_tooltip = {
+								datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_p_value')]"
+								blockoverride "header_text" { text = tnt_ma_grade_title visible = yes }
+								blockoverride "input_info_text" { text = tnt_ma_grade_help visible = yes }
+							}
+						}
+					}
+
+					# Player-side candidate, with a potential alliance reported by C++.
+					text_single = {
+						name = "tnt_ma_grade_p_alliance"
+						position = { 6 0 }
+						min_width = 112
+						max_width = 112
+						autoresize = no
+						align = left|nobaseline
+						using = Font_Size_Medium
+						size = { 112 26 }
+						min_height = 26
+						max_height = 26
+						alwaystransparent = no
+						datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_p_alliance_value')]"
+						raw_text = "#low MCA#! [GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue('tnt_ma_grade_p_alliance_value')|+=0]"
+						visible = "[And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), MatchmakerInteractionWindow.IsPickingSecondaryActor ), And( GreaterThan_CFixedPoint( GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue('tnt_ma_grade_p_available_value'), '(CFixedPoint)0' ), DataModelHasItems( CharacterListItem.GetOtherCharacterItems ) ) )]"
+						using = tooltip_ne
+						tooltipwidget = {
+							widget_value_breakdown_tooltip = {
+								datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_p_alliance_value')]"
+								blockoverride "header_text" { text = tnt_ma_grade_title visible = yes }
+								blockoverride "input_info_text" { text = tnt_ma_grade_help visible = yes }
+							}
+						}
+					}
+
+					# Partner-side candidate, without a potential alliance.
+					text_single = {
+						name = "tnt_ma_grade_r"
+						position = { 6 0 }
+						min_width = 112
+						max_width = 112
+						autoresize = no
+						align = left|nobaseline
+						using = Font_Size_Medium
+						size = { 112 26 }
+						min_height = 26
+						max_height = 26
+						alwaystransparent = no
+						datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_r_value')]"
+						raw_text = "#low MCA#! [GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).ScriptValue('tnt_ma_grade_r_value')|+=0]"
+						visible = "[And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), MatchmakerInteractionWindow.IsPickingSecondaryRecipient ), And( GreaterThan_CFixedPoint( GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).ScriptValue('tnt_ma_grade_r_available_value'), '(CFixedPoint)0' ), Not( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ) ) ) )]"
+						using = tooltip_ne
+						tooltipwidget = {
+							widget_value_breakdown_tooltip = {
+								datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_r_value')]"
+								blockoverride "header_text" { text = tnt_ma_grade_title visible = yes }
+								blockoverride "input_info_text" { text = tnt_ma_grade_help visible = yes }
+							}
+						}
+					}
+
+					# Partner-side candidate, with a potential alliance reported by C++.
+					text_single = {
+						name = "tnt_ma_grade_r_alliance"
+						position = { 6 0 }
+						min_width = 112
+						max_width = 112
+						autoresize = no
+						align = left|nobaseline
+						using = Font_Size_Medium
+						size = { 112 26 }
+						min_height = 26
+						max_height = 26
+						alwaystransparent = no
+						datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_r_alliance_value')]"
+						raw_text = "#low MCA#! [GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).ScriptValue('tnt_ma_grade_r_alliance_value')|+=0]"
+						visible = "[And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), MatchmakerInteractionWindow.IsPickingSecondaryRecipient ), And( GreaterThan_CFixedPoint( GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).ScriptValue('tnt_ma_grade_r_available_value'), '(CFixedPoint)0' ), DataModelHasItems( CharacterListItem.GetOtherCharacterItems ) ) )]"
+						using = tooltip_ne
+						tooltipwidget = {
+							widget_value_breakdown_tooltip = {
+								datacontext = "[GuiScope.SetRoot(Character.MakeScope).AddScope('actor', GetPlayer.MakeScope).GetScriptValueBreakdown('tnt_ma_grade_r_alliance_value')]"
+								blockoverride "header_text" { text = tnt_ma_grade_title visible = yes }
+								blockoverride "input_info_text" { text = tnt_ma_grade_help visible = yes }
+							}
+						}
+					}
+
+				}
+
+				text_single = {
+					name = "character_relation"
+					layoutpolicy_horizontal = expanding
+					raw_text = "|  [Character.GetRelationToString( GetPlayer )]"
+					tooltip = "EXTENDED_RELATIONS_TOOLTIP"
+					default_format = "#low"
+					autoresize = no
+					align = nobaseline
+					visible = "[Character.HasRelationTo( GetPlayer )]"
+					alwaystransparent = yes
+				}
+			}
+		}
+	}
+}

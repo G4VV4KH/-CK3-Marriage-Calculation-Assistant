@@ -1,0 +1,36 @@
+﻿# MCA score snapshot and freshness values.
+# Root/ambient scope = candidate; actor = player; P also has temporary tnt_gr_p.
+# Reuse the exact visible grade and availability values, including adapters.
+# An unavailable grade sorts below ordinary scores; round to the shown integer.
+tnt_ma_sort_p_capture_value = {
+	value = -10000
+	if = {
+		limit = { tnt_ma_grade_p_available_value > 0 }
+		value = tnt_ma_grade_p_value
+	}
+	round = yes
+}
+tnt_ma_sort_p_alliance_capture_value = {
+	value = -10000
+	if = {
+		limit = { tnt_ma_grade_p_available_value > 0 }
+		value = tnt_ma_grade_p_alliance_value
+	}
+	round = yes
+}
+tnt_ma_sort_r_capture_value = {
+	value = -10000
+	if = {
+		limit = { tnt_ma_grade_r_available_value > 0 }
+		value = tnt_ma_grade_r_value
+	}
+	round = yes
+}
+tnt_ma_sort_r_alliance_capture_value = {
+	value = -10000
+	if = {
+		limit = { tnt_ma_grade_r_available_value > 0 }
+		value = tnt_ma_grade_r_alliance_value
+	}
+	round = yes
+}

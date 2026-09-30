@@ -1,0 +1,93 @@
+# Marriage Calculation Assistant
+
+## At a glance
+
+- 🟢 **Version 3.0.1** · Built for CK3 **1.19.x**; tested on **1.19.0.6**.
+- 🟢 **Requires Parley: The Negotiating Table.** Load MCA after Parley.
+- 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
+- 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
+- 🔴 **The score measures candidate gameplay potential.** It is not AI marriage acceptance or a prediction of the outcome of a particular marriage.
+- 🔴 **Marriage-window conflict:** another mod replacing `gui/interaction_marriage.gui` needs a functional compatibility patch.
+- 🔴 **Multiplayer and every mod combination have not been verified.**
+
+## Find the person behind the list
+
+A useful claim, an exceptional mind or a powerful potential ally: the best candidate depends on what you need. MCA puts a readable comparison beside each name and explains the score.
+
+## Compare candidates without losing the details
+
+MCA adds a score to candidate rows in CK3's marriage picker. Hover it for the game's native breakdown. Switch to **MCA: by score** to bring the highest-scoring candidates to the top.
+
+Both sides use the same core components, with explicit design weights for the opportunities below. Potential alliance strength contributes when reported by the native picker. Supported adapters can add setting-specific potential.
+
+The score helps compare opportunities. It does not change marriage acceptance, modify the chosen candidate or decide whom you should marry.
+
+## What the score includes
+
+- **Visible inheritable qualities:** explicit active traits with positive and negative weights. Hidden or recessive genetics are not inspected.
+- **Skills:** a capped estimate based on public skills and the unmodified assist-spouse baseline, without assuming council eligibility.
+- **Age-based reproductive potential:** a 0–20 index using effective age and selected public restrictions. This is not a birth probability.
+- **Dynastic prestige potential:** a scaled comparison from the dynasty marriage-prestige table, rather than the selected pair's exact reward.
+- **Explicit claims:** the strongest explicit claim contributes; pressed claims receive more weight than unpressed claims. Marriage does not immediately transfer a claim or title to you.
+- **Potential alliance:** included only when the native row reports that opportunity, with a capped comparison based on military strength. It does not guarantee military assistance.
+
+Court position, arranger opinion and reluctance to release a courtier do not contribute. Hidden fertility/health, secret parentage, predicted children, the succession queue and the full utility of the selected couple are outside the model.
+
+## How to use it
+
+1. Open a marriage picker and set the game's normal filters.
+2. Hover an **MCA** number to inspect its components. The displayed breakdown adds up to the score.
+3. Close the filter panel and choose **MCA: by score** for descending score order. Equal scores keep their current native order; unavailable scores go last.
+4. Choose **Default list** to restore the native ordering and filter controls.
+
+The separate pinned-player row stays pinned. Changing the active picker side, marriage type or candidate context clears the sorted snapshot; you can enable score sorting again. Selecting a moved row still selects the character displayed in that row.
+
+## Compatibility and load order
+
+**Required:** Parley: The Negotiating Table.
+
+**Vanilla file replacement:** `gui/interaction_marriage.gui`. MCA adds a marriage-specific row, score controls, sorted-list projection and cleanup behavior. It does not replace `gui/shared/lists.gui`, `arrange_marriage_interaction` or `marry_off_interaction`.
+
+Another mod replacing `gui/interaction_marriage.gui` requires a patch preserving both mods' behavior; load order alone cannot merge the files. A mod changing only `gui/shared/lists.gui` can work when its row retains the vanilla `character_relation` block in the name/age column. This does not certify every list mod.
+
+**Vanilla family order:**
+
+1. Parley: The Negotiating Table
+2. Marriage Calculation Assistant
+
+**AGOT family order:**
+
+1. A Game of Thrones
+2. Parley: The Negotiating Table
+3. Marriage Calculation Assistant
+4. AGOT: Marriage Calculation Assistant
+
+The checked AGOT combination uses **AGOT 0.5.2.1** and **AGOT:MCA 2.2.0**. Use the candidate-potential adapter from the 2.2 series with this MCA release; the older 2.1 adapter uses the previous scoring meaning.
+
+**Available adapter:** AGOT: Marriage Calculation Assistant. It adds current-dragonrider potential and contains no replacement marriage GUI. No additional interface compatibility patches are included. Enable only one copy of each mod in a playset.
+
+## Saves and tested scope
+
+Scores are calculated without stamping or modifying candidates. Optional sorting stores a temporary snapshot on the local player, and normal picker cleanup removes it. **Close the marriage picker before saving or disabling MCA.** Disabling the mod while a sorting snapshot is still stored can leave inert variables in the save.
+
+Tests covered score arithmetic, sorting and selection at 100% UI scale; 125% acceptance was user-reported. The AGOT rider contribution was observed on the candidate side and native pinned recipient. Every layout, unpinned recipient case and multiplayer behavior remain unverified.
+
+Version 3.0.1 fixes adapter defaults so the AGOT rider contribution is included. Core weights, sorting and layout are unchanged by that fix.
+
+## Feedback and support
+
+For a score report, include the candidate, the visible breakdown, picker side, mod versions, load order and a screenshot. For interface problems, also include resolution and UI scale. Distinguish a score that appears wrong from a marriage proposal the AI will not accept: they are separate calculations.
+
+
+## Find MCA elsewhere
+
+- Steam Workshop
+- Paradox Mods
+- Nexus Mods
+- GitHub
+
+## My mods
+
+- Parley: The Negotiating Table — negotiate complete diplomatic agreements.
+- Marriage Calculation Assistant — compare marriage candidates with readable scores and sorting.
+- AGOT: Marriage Calculation Assistant — add AGOT candidate potential to MCA.
