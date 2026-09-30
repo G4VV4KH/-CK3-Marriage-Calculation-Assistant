@@ -4,7 +4,4 @@ tags={
 	"Interface"
 	"Utilities"
 }
-dependencies={
-	"Parley: The Negotiating Table"
-}
 supported_version="1.20.*"

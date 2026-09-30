@@ -7,6 +7,34 @@ or establish compatibility beyond the tested cases.
 
 ## Visible behavior and ownership
 
+### Standalone correction, 2026-10-01
+
+MCA is standalone. RC9 removes the obsolete Parley dependency from the descriptor;
+all other MCA runtime bytes, and all Parley runtime bytes, match RC8. The shared
+family gate now enforces the standalone contract. MCA's own source checker resolves
+its values, GUI actions, custom state and localization without Parley and rejects
+11 injected dependency/foreign-reference/adapter failures. Results: 10/10 MCA
+source checks and 9/9 shared family checks. Zero-valued optional adapter rows
+remain hidden without an adapter; Parley does not supply those descriptions.
+
+A fresh CK3 1.20.0.2 process loaded only the RC9 MCA payload, without Parley, AGOT
+or a harness. The foreign-candidate list contained 438 of 454 candidates; sorting
+moved Khatun 62 above Bahiyya 41 and Mamam 40. Her breakdown was 6 + 20 + 20 + 8 + 8,
+and selection opened the matching Khatun-e-Kermani preview with 3914 ally troops.
+The own-court picker showed ten candidates and retained the pinned player; Ishaq's
+23 was 8 + 20 - 5 and selection opened Ishaq's matching preview. Closing and
+reopening restored native order. The post-exit error log was empty.
+
+This was a paused picker smoke: no proposal, time advancement or save/reload.
+Close/reopen establishes visible reset, not a serialized-state audit. The
+own-court list was already descending; row movement was directly demonstrated
+on the foreign side. The original save's SHA-256 stayed unchanged. Runtime
+puppet UI, multiplayer and current AGOT support remain outside this result.
+The release workspace stores the hash-linked report, logs and seven captures in
+`verification-evidence/standalone-2026-10-01/`.
+
+### Native arranger context
+
 MCA now uses vanilla's `GetPuppetOrActor` for the marriage window's small left
 portrait. Direct arrangements by the local player retain scores and sorting.
 For a puppet arrangement, MCA hides the player-perspective scores and disables

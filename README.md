@@ -2,8 +2,8 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.2**. Native picker checks passed with Parley 1.1.0.
-- 🟢 **Requires Parley 1.1.0.** Load MCA after Parley: The Negotiating Table.
+- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.2**. Native picker checks passed standalone and with Parley 1.1.0.
+- 🟢 **Standalone:** Parley is optional. MCA supplies its own scores, sorting and interface.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
 - 🔴 **The score measures candidate gameplay potential.** It is not AI marriage acceptance or a prediction of the outcome of a particular marriage.
@@ -49,16 +49,18 @@ MCA scores and sorting apply when arranging directly as your own ruler. Arrangin
 
 ## Compatibility and load order
 
-**Required for this release:** Parley: The Negotiating Table **1.1.0**.
+**Requirements:** CK3 1.20.0.2. No other mod is required; Parley is optional.
 
 **Vanilla file replacement:** `gui/interaction_marriage.gui`. MCA adds a marriage-specific row, score controls, sorted-list projection and cleanup behavior. It does not replace `gui/shared/lists.gui`, `arrange_marriage_interaction` or `marry_off_interaction`.
 
 Another `gui/interaction_marriage.gui` replacement needs a functional patch; load order cannot merge files. A mod changing only `gui/shared/lists.gui` can work if its row retains vanilla's `character_relation` block in the name/age column. This is not blanket list-mod compatibility.
 
-**Vanilla family order:**
+**Optional combined load order:**
 
 1. Parley: The Negotiating Table
 2. Marriage Calculation Assistant
+
+Standalone: enable MCA alone.
 
 **Historical RC3 AGOT order — CK3 1.19.0.6 only:**
 
@@ -75,9 +77,9 @@ That historical result does not certify MCA 3.1.0 with AGOT on CK3 1.20. A curre
 
 Sorting stores a temporary snapshot on the local player; normal picker cleanup removes it. **Close the marriage picker before saving or disabling MCA**, otherwise inert snapshot variables can remain. Candidates are not modified.
 
-The retained screenshots show **MCA 3.0.1 on CK3 1.19.0.6**. Earlier interface checks covered 100% and 125% UI scale; those scale results do not certify this update. On CK3 1.20.0.2, RC7 passed large-list and both-side sorting, tooltip arithmetic, correct character selection and the tested filter/reset transitions, with no animation-state warnings.
+Screenshots show **MCA 3.0.1 on CK3 1.19.0.6**. Historical 100%/125% scale checks do not certify this update. On CK3 1.20.0.2, RC7 passed large-list and both-side sorting, tooltip arithmetic, selection and filter/reset checks without animation-state warnings.
 
-RC7's Parley AI-world defect was fixed in RC8, which passed vanilla Parley/MCA validation with unchanged MCA runtime. Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and other total conversions remain unverified.
+RC9 removes an obsolete Parley dependency declaration. An MCA-only run passed both picker sides, breakdowns, sorting, selection and close/reopen reset with an empty error log. RC8 retains combined Parley/MCA evidence. Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and other total conversions remain unverified.
 
 Version 3.1.0 updates the native arranger portrait and guards scoring/sorting by the actual arranger. Core weights and adapter component meanings are unchanged.
 

@@ -4,6 +4,11 @@ MCA 3.1.0 source is in `mod/marriage_calc_assistant/`. That folder's preserved 3
 
 ## Ownership
 
+MCA must remain standalone; Parley is an optional companion. RC9 removes the
+obsolete dependency declaration without changing gameplay/GUI bytes. The source
+checker now enforces local symbol closure and rejects injected Parley references;
+the CK3 1.20 review records the separate MCA-only native picker smoke.
+
 MCA owns the candidate score, marriage-only row and private player sorting snapshot. It does not change marriage acceptance or stamp scores onto candidates. Both picker sides share the five core potential components; alliance metadata and optional adapter components are added through their existing boundaries.
 
 In 3.1.0, both the actual actor and effective arranger must be the local player before scores or sorting are available. Puppet arrangements retain the native list without MCA scores or MCA sorting; an arranger change invalidates the player's sorted snapshot. Preserve that direct-ruler ownership boundary in GUI packets, start/collect guards and context cleanup.

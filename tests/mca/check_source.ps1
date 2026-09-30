@@ -138,6 +138,107 @@ function Assert-Structure {
     Assert-True ($depth -eq 0 -and -not $quoted) "$Label has unbalanced braces/strings"
 }
 
+function Remove-ScriptComments {
+    param([string]$Text)
+    # Preserve quoted GUI expressions and localization markup such as #low ... #!.
+    return [regex]::Replace($Text, '"(?:\\.|[^"\\])*"|#[^\r\n]*', {
+        param($Match)
+        if ($Match.Value.StartsWith('#')) { return ' ' * $Match.Length }
+        return $Match.Value
+    })
+}
+function Get-GuiCallArguments {
+    param([string]$Text, [int]$Open)
+    $arguments = New-Object 'System.Collections.Generic.List[string]'
+    $depth = 1; $quoted = $false; $escaped = $false; $start = $Open + 1
+    for ($i = $start; $i -lt $Text.Length; $i++) {
+        $ch = $Text[$i]
+        if ($quoted) {
+            if ($escaped) { $escaped = $false }
+            elseif ($ch -eq '\') { $escaped = $true }
+            elseif ($ch -eq "'") { $quoted = $false }
+            continue
+        }
+        if ($ch -eq "'") { $quoted = $true; continue }
+        if ($ch -eq '(') { $depth++ }
+        if ($ch -eq ')') { $depth-- }
+        if (($ch -eq ',' -and $depth -eq 1) -or $depth -eq 0) {
+            $arguments.Add($Text.Substring($start, $i - $start).Trim())
+            $start = $i + 1
+        }
+        if ($depth -eq 0) { return [pscustomobject]@{ Arguments = $arguments.ToArray() } }
+    }
+    throw 'Standalone localization: unclosed GUI localization call'
+}
+function Get-GuiLocalizationBranchKeys {
+    param([string]$Expression)
+    $literal = [regex]::Match($Expression, "^'([A-Za-z_]\w*)'$")
+    if ($literal.Success) { return $literal.Groups[1].Value }
+    Assert-True ([regex]::IsMatch($Expression, '^Select_CString\s*\(')) "Standalone localization: unreviewed computed key $Expression"
+    $call = Get-GuiCallArguments $Expression $Expression.IndexOf('(')
+    Assert-True ($call.Arguments.Count -eq 3) 'Standalone localization: Select_CString needs three arguments'
+    Get-GuiLocalizationBranchKeys $call.Arguments[1]
+    Get-GuiLocalizationBranchKeys $call.Arguments[2]
+}
+function Assert-McaStandalone {
+    param(
+        [hashtable]$Sources, [string[]]$ValueNames, [string[]]$GuiNames,
+        [string[]]$LocKeys, [System.Collections.Generic.HashSet[string]]$NativeLocKeys
+    )
+    $descriptorCode = Remove-ScriptComments $Sources['descriptor.mod']
+    Assert-True (-not [regex]::IsMatch($descriptorCode, '\bdependencies\s*=')) 'Standalone dependency: MCA must declare no required mod'
+    $code = (($Sources.Keys | Where-Object { $_ -match '\.(txt|gui)$' } | Sort-Object | ForEach-Object { Remove-ScriptComments $Sources[$_] }) -join "`n")
+    $gui = (($Sources.Keys | Where-Object { $_ -match '\.gui$' } | Sort-Object | ForEach-Object { Remove-ScriptComments $Sources[$_] }) -join "`n")
+
+    # All custom values, including Select_CString capture alternatives, are local.
+    foreach ($match in [regex]::Matches($code, '\b[A-Za-z_]\w*_value\b')) {
+        Assert-True ($ValueNames -ccontains $match.Value) "Standalone value: unresolved $($match.Value)"
+    }
+    foreach ($match in [regex]::Matches($gui, "\b(?:ScriptValue|GetScriptValueBreakdown)\(\s*'([A-Za-z_]\w*)'")) {
+        Assert-True ($ValueNames -ccontains $match.Groups[1].Value) "Standalone value: unresolved $($match.Groups[1].Value)"
+    }
+    foreach ($match in [regex]::Matches($gui, "\bGetScriptedGui\(\s*'([A-Za-z_]\w*)'")) {
+        Assert-True ($GuiNames -ccontains $match.Groups[1].Value) "Standalone scripted GUI: unresolved $($match.Groups[1].Value)"
+    }
+
+    # Optional adapter descriptions are the only intentionally external keys.
+    # Accept each occurrence only inside its matching nonzero-component guard;
+    # the standalone component must still be the exact formula-zero default.
+    foreach ($side in @('p','r')) {
+        foreach ($component in 1..4) {
+            $key = "tnt_ma_adapter_$($side)_c$component"
+            $value = $key + '_value'
+            Assert-True ((Count-Matches $code ('(?m)^' + $value + '\s*=\s*\{\s*value\s*=\s*0\s*\}\s*$')) -eq 1) "Standalone adapter: $value must default to formula zero"
+            $guard = 'if\s*=\s*\{\s*limit\s*=\s*\{\s*' + $value + '\s*!=\s*0\s*\}\s*add\s*=\s*\{\s*value\s*=\s*' + $value + '\s+desc\s*=\s*' + $key + '\s*\}\s*\}'
+            $code = [regex]::Replace($code, $guard, '')
+            Assert-True (-not [regex]::IsMatch($code, '\b' + $key + '\b')) "Standalone adapter: unguarded description $key"
+        }
+    }
+
+    $locCode = (($Sources.Keys | Where-Object { $_ -match '\.yml$' } | Sort-Object | ForEach-Object { Remove-ScriptComments $Sources[$_] }) -join "`n")
+    $locReferences = @([regex]::Matches($code, '\b(?:text|tooltip|desc)\s*=\s*"?([A-Za-z_]\w*)\b') | ForEach-Object { $_.Groups[1].Value })
+    $locReferences += @([regex]::Matches($locCode, '\$([A-Za-z_]\w*)\$') | ForEach-Object { $_.Groups[1].Value })
+    foreach ($match in [regex]::Matches($gui, '\bSelectLocalization\s*\(')) {
+        $call = Get-GuiCallArguments $gui ($match.Index + $match.Length - 1)
+        Assert-True ($call.Arguments.Count -eq 3) 'Standalone localization: SelectLocalization needs three arguments'
+        $locReferences += @(Get-GuiLocalizationBranchKeys $call.Arguments[1])
+        $locReferences += @(Get-GuiLocalizationBranchKeys $call.Arguments[2])
+    }
+    foreach ($key in $locReferences) {
+        Assert-True (($LocKeys -ccontains $key) -or $NativeLocKeys.Contains($key)) "Standalone localization: unresolved $key"
+    }
+
+    # Scope aliases, variable/list names and GUI types are supplied locally,
+    # not by a Parley session. Derive declarations instead of allowing tnt_ma_*.
+    $localNames = @($ValueNames) + @($GuiNames) + @($LocKeys) + @('tnt_gr_me','tnt_gr_p','tnt_gr_side','tnt_sp_one')
+    $localNames += @([regex]::Matches($code, '\b(?:name\s*=|type|save_temporary_scope_as\s*=)\s*"?(tnt_ma_\w+)\b') | ForEach-Object { $_.Groups[1].Value })
+    $localNames += @([regex]::Matches($gui, "\bAddScope(?:Value)?\(\s*'(tnt_ma_\w+)'\s*,") | ForEach-Object { $_.Groups[1].Value })
+    foreach ($match in [regex]::Matches($code + "`n" + $locCode, '\btnt_\w+\b')) {
+        Assert-True ($localNames -ccontains $match.Value) "Standalone custom symbol: unresolved $($match.Value)"
+    }
+    Assert-True (-not [regex]::IsMatch($gui, '\bTnt\w+\s*\(')) 'Standalone GUI macro: Parley Tnt macro reference'
+}
+
 try {
     $mod = (Resolve-Path -LiteralPath $McaRoot).Path.TrimEnd([char[]]'\/')
     $game = (Resolve-Path -LiteralPath $GameRoot).Path.TrimEnd([char[]]'\/')
@@ -162,6 +263,7 @@ try {
     $descriptor = Read-Utf8 (Join-Path $mod 'descriptor.mod')
     Assert-True ((Count-Matches $descriptor '(?m)^version\s*=\s*"3\.1\.0"\s*$') -eq 1) 'Expected MCA descriptor version 3.1.0'
     Assert-True ((Count-Matches $descriptor '(?m)^supported_version\s*=\s*"1\.20\.\*"\s*$') -eq 1) 'Expected reviewed CK3 supported_version 1.20.*'
+    Assert-True (-not [regex]::IsMatch((Remove-ScriptComments $descriptor), '\bdependencies\s*=')) 'Standalone dependency: MCA must declare no required mod'
     Pass 'exact 18-file inventory; version 3.1.0; only marriage GUI collides with vanilla'
 
     foreach ($file in $runtime) {
@@ -327,7 +429,53 @@ try {
         }
     }
     Pass 'static brace/string and GUI expression balance'
-    Write-Output "MCA source checks: $script:CheckCount/8 PASS. Static checks only; CK3 parser/UI validation remains separate."
+
+    $sources = @{}
+    foreach ($file in $runtime) {
+        $rel = $file.FullName.Substring($mod.Length + 1).Replace('\','/')
+        $sources[$rel] = Read-Utf8 $file.FullName
+    }
+    $nativeLocKeys = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($file in Get-ChildItem -LiteralPath (Join-Path $game 'localization/english') -Recurse -File -Filter '*.yml') {
+        foreach ($match in [regex]::Matches((Read-Utf8 $file.FullName), '(?m)^\s*([A-Za-z_]\w*):\d*\s+')) {
+            [void]$nativeLocKeys.Add($match.Groups[1].Value)
+        }
+    }
+    Assert-McaStandalone $sources $allValueNames $sgNames $allLocKeys $nativeLocKeys
+    Pass 'standalone closure: no required mod; local values/actions/state and MCA-or-vanilla localization'
+
+    # Mutate in memory so these tests reach closure checks, not frozen GUI hashes.
+    # These are real Parley-only names, but no Parley source is needed to run.
+    $gradeRel = 'common/script_values/tnt_ma_52_grade.txt'
+    $rowRel = 'gui/tnt_ma_character_list_item.gui'
+    $locRel = 'localization/english/tnt_ma_l_english.yml'
+    $negativeCases = @(
+        @{ Label = 'required mod'; File = 'descriptor.mod'; Text = $descriptor + "dependencies = { `"Parley: The Negotiating Table`" }`n"; Error = 'Standalone dependency:' },
+        @{ Label = 'Parley script value'; File = $gradeRel; Text = $grade.Replace('value = tnt_ma_skill_value', 'value = tnt_balance_value'); Error = 'Standalone value: unresolved tnt_balance_value' },
+        @{ Label = 'Parley GUI value after markup'; File = $rowRel; Text = $row + "`ntext_single = { raw_text = `"#low [GuiScope.ScriptValue('tnt_balance_value')]#!`" }`n"; Error = 'Standalone value: unresolved tnt_balance_value' },
+        @{ Label = 'Parley GUI action'; File = $rowRel; Text = $row + "`nbutton = { onclick = `"[GetScriptedGui('tnt_pick_marriage_open').Execute( GuiScope.End )]`" }`n"; Error = 'Standalone scripted GUI: unresolved tnt_pick_marriage_open' },
+        @{ Label = 'Parley GUI localization'; File = $rowRel; Text = $row.Replace('text = tnt_ma_grade_title', 'text = tnt_window_title'); Error = 'Standalone localization: unresolved tnt_window_title' },
+        @{ Label = 'Parley localization substitution'; File = $locRel; Text = $sources[$locRel].Replace('Candidate gameplay potential', 'Candidate gameplay potential $tnt_window_title$'); Error = 'Standalone localization: unresolved tnt_window_title' },
+        @{ Label = 'computed localization alternatives'; File = $rowRel; Text = $row + "`ntext_single = { text = `"[SelectLocalization( True, 'external_parley_label', Select_CString( True, 'tnt_ma_grade_title', 'another_external_label' ) )]`" }`n"; Error = 'Standalone localization: unresolved external_parley_label' },
+        @{ Label = 'Parley session variable'; File = $rowRel; Text = $row + "`nwidget = { visible = `"[GetPlayer.MakeScope.HasVariable('tnt_open')]`" }`n"; Error = 'Standalone custom symbol: unresolved tnt_open' },
+        @{ Label = 'widget name masking Parley session variable'; File = $rowRel; Text = $row + "`nwidget = { name = `"tnt_open`" visible = `"[GetPlayer.MakeScope.HasVariable('tnt_open')]`" }`n"; Error = 'Standalone custom symbol: unresolved tnt_open' },
+        @{ Label = 'unguarded adapter description'; File = $gradeRel; Text = $grade.Replace('tnt_ma_adapter_p_c1_value != 0', 'tnt_ma_adapter_p_c1_value >= 0'); Error = 'Standalone adapter: unguarded description tnt_ma_adapter_p_c1' },
+        @{ Label = 'active standalone adapter'; File = 'common/script_values/tnt_ma_00_adapter_defaults.txt'; Text = $defaults.Replace('tnt_ma_adapter_p_c1_value = { value = 0 }', 'tnt_ma_adapter_p_c1_value = { value = 1 }'); Error = 'Standalone adapter: tnt_ma_adapter_p_c1_value must default to formula zero' }
+    )
+    foreach ($case in $negativeCases) {
+        Assert-True ($case.Text -cne $sources[$case.File]) "Standalone negative fixture did not mutate: $($case.Label)"
+        $mutated = $sources.Clone()
+        $mutated[$case.File] = $case.Text
+        $failure = ''
+        try { Assert-McaStandalone $mutated $allValueNames $sgNames $allLocKeys $nativeLocKeys }
+        catch { $failure = $_.Exception.Message }
+        Assert-True ($failure.StartsWith($case.Error, [System.StringComparison]::Ordinal)) "Standalone negative '$($case.Label)' expected '$($case.Error)', got '$failure'"
+    }
+    $commentOnly = $sources.Clone()
+    $commentOnly[$rowRel] += "`n# tnt_balance_value tnt_pick_marriage_open tnt_window_title TntMacro() dependencies = {}`n"
+    Assert-McaStandalone $commentOnly $allValueNames $sgNames $allLocKeys $nativeLocKeys
+    Pass "standalone negative fixtures: $($negativeCases.Count) foreign/dependency/adapter mutations rejected; comment-only control passes"
+    Write-Output "MCA source checks: $script:CheckCount/10 PASS. Static checks only; CK3 parser/UI validation remains separate."
     exit 0
 }
 catch {
