@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "mod": "marriage_calc_assistant",
+  "source_gallery": "publication-media/marriage_calc_assistant/selected-gallery.json",
+  "items": [
+    {
+      "file": "publishing/screenshots/01-recipient-candidate-list.png",
+      "caption_en": "Compare potential spouses from other courts, sorted by MCA score.",
+      "sha256": "a91f628d34e9eaa42634468e6b612d8040dd2fc039f50756517f45494d4c0196"
+    },
+    {
+      "file": "publishing/screenshots/02-sender-candidate-list.png",
+      "caption_en": "Rank candidates from your own court when arranging a marriage with another ruler.",
+      "sha256": "676114b373955501614e8289ed60a189b1b64d5fb328091ac1b5b9be1f4afb73"
+    }
+  ]
+}

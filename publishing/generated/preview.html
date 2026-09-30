@@ -8,28 +8,30 @@
 <p>- 🟢 <strong>Nine languages:</strong> English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.</p>
 <p>- 🔴 <strong>The score measures candidate gameplay potential.</strong> It is not AI marriage acceptance or a prediction of the outcome of a particular marriage.</p>
 <p>- 🔴 <strong>Marriage-window conflict:</strong> another mod replacing <code>gui/interaction_marriage.gui</code> needs a functional compatibility patch.</p>
-<p>- 🔴 <strong>Multiplayer and every mod combination have not been verified.</strong></p>
+<p>- 🔴 <strong>Multiplayer is unverified.</strong> Check the compatibility section before combining marriage-interface mods.</p>
 
 <h2>Find the person behind the list</h2>
 
-<p>A useful claim, an exceptional mind or a powerful potential ally: the best candidate depends on what you need. MCA puts a readable comparison beside each name and explains the score.</p>
+<p>A useful claim, an exceptional mind or a powerful potential ally: the best candidate depends on what you need. Find promising names in a long marriage list, then hover their scores to see what makes them stand out.</p>
 
 <h2>Compare candidates without losing the details</h2>
 
-<p>MCA adds a score to candidate rows in CK3&#x27;s marriage picker. Hover it for the game&#x27;s native breakdown. Switch to <strong>MCA: by score</strong> to bring the highest-scoring candidates to the top.</p>
+<p>MCA adds a score to candidate rows in CK3&#x27;s marriage picker. Hover the number for a breakdown of its components. Switch to <strong>MCA: by score</strong> to bring the highest-scoring candidates to the top.</p>
 
-<p>Both sides use the same core components, with explicit design weights for the opportunities below. Potential alliance strength contributes when reported by the native picker. Supported adapters can add setting-specific potential.</p>
+<p>It works when choosing a potential spouse from another court and when choosing someone from your own court to offer in marriage. Both lists use the same core components and weights. Potential alliance strength contributes when reported by the game&#x27;s picker, and adapters can add opportunities specific to a setting.</p>
 
-<p>The score helps compare opportunities. It does not change marriage acceptance, modify the chosen candidate or decide whom you should marry.</p>
+<p>The score helps compare opportunities. It does not change marriage acceptance or modify the chosen candidate. Two candidates&#x27; scores are not prices to add together, and MCA points are separate from Parley&#x27;s treaty score.</p>
 
 <h2>What the score includes</h2>
 
-<p>- <strong>Visible inheritable qualities:</strong> explicit active traits with positive and negative weights. Hidden or recessive genetics are not inspected.</p>
-<p>- <strong>Skills:</strong> a capped estimate based on public skills and the unmodified assist-spouse baseline, without assuming council eligibility.</p>
-<p>- <strong>Age-based reproductive potential:</strong> a 0–20 index using effective age and selected public restrictions. This is not a birth probability.</p>
-<p>- <strong>Dynastic prestige potential:</strong> a scaled comparison from the dynasty marriage-prestige table, rather than the selected pair&#x27;s exact reward.</p>
-<p>- <strong>Explicit claims:</strong> the strongest explicit claim contributes; pressed claims receive more weight than unpressed claims. Marriage does not immediately transfer a claim or title to you.</p>
-<p>- <strong>Potential alliance:</strong> included only when the native row reports that opportunity, with a capped comparison based on military strength. It does not guarantee military assistance.</p>
+<p>- <strong>Visible inheritable qualities:</strong> active inheritable traits receive positive or negative weights. The three positive intelligence, beauty and physique tiers are worth +10, +20 and +30; their negative counterparts subtract the same amounts. Other supported inheritable traits have their own weights. Hidden or recessive genetics are not inspected.</p>
+<p>- <strong>Skills:</strong> up to 30 points, based on the five public skills and the standard assist-spouse contribution. Candidates younger than an effective age of 16, or incapable candidates, receive zero for this component. The score does not assume they will be eligible to serve on your council.</p>
+<p>- <strong>Age-based reproductive potential:</strong> a 0–20 index using effective age and selected visible restrictions. It is not a birth probability. A child&#x27;s zero here describes current potential, not a prediction of lifelong childlessness.</p>
+<p>- <strong>Dynastic prestige potential:</strong> −5 to +45 points, scaled from the dynasty marriage-prestige table. This is an indication of dynastic standing, rather than the selected pair&#x27;s exact prestige reward.</p>
+<p>- <strong>Explicit claims:</strong> the strongest explicit claim contributes, up to 24 points; pressed claims receive twice the weight of unpressed claims of the same rank. Marriage does not immediately transfer a claim or title to you.</p>
+<p>- <strong>Potential alliance:</strong> included only when the game&#x27;s candidate row reports that opportunity, with up to 100 points based on the potential ally&#x27;s military strength relative to yours. It does not guarantee military assistance.</p>
+
+<p>These components, plus any adapter contributions, add up to the displayed score. Their point values are design weights for comparing candidates, not percentages or amounts of a shared game resource. A strong total can therefore combine different advantages: inspect the breakdown to find the ones that matter to your plans.</p>
 
 <p>Court position, arranger opinion and reluctance to release a courtier do not contribute. Hidden fertility/health, secret parentage, predicted children, the succession queue and the full utility of the selected couple are outside the model.</p>
 
@@ -70,21 +72,22 @@
 
 <p>Scores are calculated without stamping or modifying candidates. Optional sorting stores a temporary snapshot on the local player, and normal picker cleanup removes it. <strong>Close the marriage picker before saving or disabling MCA.</strong> Disabling the mod while a sorting snapshot is still stored can leave inert variables in the save.</p>
 
-<p>Tests covered score arithmetic, sorting and selection at 100% UI scale; 125% acceptance was user-reported. The AGOT rider contribution was observed on the candidate side and native pinned recipient. Every layout, unpinned recipient case and multiplayer behavior remain unverified.</p>
+<p>The interface has been checked at 100% and 125% UI scale. Other scales, multiplayer and other total conversions are not verified.</p>
 
-<p>Version 3.0.1 fixes adapter defaults so the AGOT rider contribution is included. Core weights, sorting and layout are unchanged by that fix.</p>
+<p>Version 3.0.1 restores the AGOT adapter&#x27;s dragonrider contribution without changing the core weights, sorting or layout.</p>
 
 <h2>Feedback and support</h2>
 
 <p>For a score report, include the candidate, the visible breakdown, picker side, mod versions, load order and a screenshot. For interface problems, also include resolution and UI scale. Distinguish a score that appears wrong from a marriage proposal the AI will not accept: they are separate calculations.</p>
 
+<p>- <a href="https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant">Source and issue reports</a></p>
 
 <h2>Find MCA elsewhere</h2>
 
 <p>- Steam Workshop</p>
 <p>- Paradox Mods</p>
 <p>- Nexus Mods</p>
-<p>- GitHub</p>
+<p>- <a href="https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant">GitHub</a></p>
 
 <h2>My mods</h2>
 
