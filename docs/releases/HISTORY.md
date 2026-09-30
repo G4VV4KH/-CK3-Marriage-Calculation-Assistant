@@ -18,3 +18,20 @@ Generated from history.json. Events are appended; a prepared build is not a publ
 - **archive**: {"file": "distribution/2026-09-30-game-rc3/marriage_calc_assistant-3.0.1-payload.zip", "sha256": "8cd9817e48e54b13dc817a9448e1a3a264beb759b7007d9c75a34e53caa4b959", "bytes": 803569}
 - **evidence**: Current committed dev runtime and frozen game payload match the build manifest.
 - **note**: Association verified now; this does not assert the original build commit or build time.
+
+## 2026-09-30T16:44:58+00:00 — VERIFIED_ASSOCIATION
+
+- **build_id**: 2026-09-30-game-rc8
+- **mod**: marriage_calc_assistant
+- **version**: 3.1.0
+- **manifest_sha256**: dfb2e7ecfadbd9203b6f6c0a0223eec552fc2cc0fde6f4bfff208f91159eca0c
+- **payload_fingerprint**: 31c04e5cd7dbc2cb338aa068cc6a346f8eddc7c4d6a524b5d30aaa5603e3986a
+- **source_fingerprint**: 31c04e5cd7dbc2cb338aa068cc6a346f8eddc7c4d6a524b5d30aaa5603e3986a
+- **current_source_fingerprint**: 31c04e5cd7dbc2cb338aa068cc6a346f8eddc7c4d6a524b5d30aaa5603e3986a
+- **source_matches**: True
+- **payload_files**: 17
+- **source_files**: 17
+- **source_git**: {"commit": "289e7746c0f72fcf1a045df73bd7c38fd2d92f8e", "runtime_tree": "464d54e833a8fc81d8c979b5ab46bfe46cbf2845", "runtime_committed": true}
+- **archive**: {"file": "distribution/2026-09-30-game-rc8/marriage_calc_assistant-3.1.0-payload.zip", "sha256": "73e860268f4721f3b0c77ee86bd4c04f8fc7d071653e6f236cb7cf2944c6d6da", "bytes": 805819}
+- **evidence**: Current committed dev runtime and frozen game payload match the build manifest.
+- **note**: Association verified now; this does not assert the original build commit or build time.
