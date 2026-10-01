@@ -77,8 +77,9 @@ Feedback and support
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
 - Source and issue reports: https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant
-- Contact the author: g4vv4kh@gmail.com: mailto:g4vv4kh@gmail.com
-- Donation information: https://ko-fi.com/g4vv4kh
+- Email: g4vv4kh@gmail.com
+
+☕ Buy me a coffee on Ko-fi 💛: https://ko-fi.com/g4vv4kh
 
 Find MCA elsewhere
 

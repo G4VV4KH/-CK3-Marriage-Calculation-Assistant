@@ -6,7 +6,7 @@
     "MCA_PARADOX_URL",
     "MCA_STEAM_URL"
   ],
-  "steam_characters": 6892,
+  "steam_characters": 6865,
   "steam_under_8000": true,
   "status": "PREVIEW_METADATA_PENDING",
   "paradox_format": "Plain text: verify final spacing in the actual upload editor.",
