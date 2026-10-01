@@ -84,8 +84,8 @@ For score reports, include the candidate, breakdown, picker side, versions, load
 ## Find MCA elsewhere
 
 - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163)
-- Paradox Mods
-- Nexus Mods
+- [Paradox Mods](https://mods.paradoxplaza.com/mods/161483/Any)
+- [Nexus Mods](https://www.nexusmods.com/crusaderkings3/mods/400)
 - [GitHub](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
 
 ## My mods
