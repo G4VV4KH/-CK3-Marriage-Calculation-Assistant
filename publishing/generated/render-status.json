@@ -3,10 +3,9 @@
   "missing_metadata": [
     "AGOT_MCA_STEAM_URL",
     "MCA_NEXUS_URL",
-    "MCA_PARADOX_URL",
-    "MCA_STEAM_URL"
+    "MCA_PARADOX_URL"
   ],
-  "steam_characters": 6865,
+  "steam_characters": 7019,
   "steam_under_8000": true,
   "status": "PREVIEW_METADATA_PENDING",
   "paradox_format": "Plain text: verify final spacing in the actual upload editor.",

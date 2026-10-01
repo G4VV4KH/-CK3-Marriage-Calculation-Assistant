@@ -83,7 +83,7 @@ For score reports, include the candidate, breakdown, picker side, versions, load
 
 Find MCA elsewhere
 
-- Steam Workshop
+- Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163
 - Paradox Mods
 - Nexus Mods
 - GitHub: https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant
@@ -91,5 +91,5 @@ Find MCA elsewhere
 My mods
 
 - Parley: The Negotiating Table: https://steamcommunity.com/sharedfiles/filedetails/?id=3811090081 — negotiate complete diplomatic agreements.
-- Marriage Calculation Assistant — compare marriage candidates with readable scores and sorting.
+- Marriage Calculation Assistant: https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163 — compare marriage candidates with readable scores and sorting.
 - AGOT: Marriage Calculation Assistant — add AGOT candidate potential to MCA.
