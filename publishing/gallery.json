@@ -5,12 +5,12 @@
   "items": [
     {
       "file": "publishing/screenshots/01-recipient-candidate-list.png",
-      "caption_en": "Historical RC3 (CK3 1.19.0.6): Compare potential spouses from other courts, sorted by MCA score.",
+      "caption_en": "Captured on CK3 1.19.0.6: Compare potential spouses from other courts, sorted by MCA score.",
       "sha256": "a91f628d34e9eaa42634468e6b612d8040dd2fc039f50756517f45494d4c0196"
     },
     {
       "file": "publishing/screenshots/02-sender-candidate-list.png",
-      "caption_en": "Historical RC3 (CK3 1.19.0.6): Rank candidates from your own court when arranging a marriage with another ruler.",
+      "caption_en": "Captured on CK3 1.19.0.6: Rank candidates from your own court when arranging a marriage with another ruler.",
       "sha256": "676114b373955501614e8289ed60a189b1b64d5fb328091ac1b5b9be1f4afb73"
     }
   ],

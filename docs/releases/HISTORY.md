@@ -109,3 +109,26 @@ Generated from history.json. Events are appended; a prepared build is not a publ
 - **evidence**: {"file": "verification-evidence/ck3-1.20.0.3-2026-10-01/mca-audit.json", "sha256": "005cd590fecf2518d87338ae53fe21db57a3ee8f6e64c0153aa019a8c8c93817", "bytes": 18900}
 - **canonical_description_sha256**: 07c70858537d3657365210e52f0117ba4a5a35cace067b38c5cd01c709bbf493
 - **note**: CK3 1.20.0.3 upstream source comparison and 47 focused source/model checks passed. Existing 17-file RC11 runtime remains unchanged. Current compatibility copy prepared; external store publication is recorded separately. AGOT hold remains. No new native game/UI test claimed.
+
+## 2026-10-01T18:55:36.678305+00:00 — VERIFIED_ASSOCIATION
+
+- **build_id**: 2026-10-01-game-rc11
+- **mod**: marriage_calc_assistant
+- **version**: 3.1.0
+- **manifest_sha256**: cba7f92fffdf94b4b5477e9f5627691093826d6bc6d6c60411e0316b7194f92d
+- **payload_fingerprint**: fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9
+- **source_fingerprint**: fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9
+- **current_source_fingerprint**: fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9
+- **source_matches**: True
+- **payload_files**: 17
+- **source_files**: 17
+- **source_git**: {"commit": "b1dbf9ff631b866d38bd3f2226a4032770abe8c2", "runtime_tree": "c1340e60668aa338dfafcb48f66a05985b76aad3", "runtime_committed": true}
+- **archive**: {"file": "distribution/2026-10-01-game-rc11/marriage_calc_assistant-3.1.0-payload.zip", "sha256": "e6866505d632a933c14186a9535dda95d2af4d74060bd5df6dd207212049833e", "bytes": 805787}
+- **association_kind**: PUBLICATION_COPY_EDITORIAL_ONLY
+- **runtime_changed**: False
+- **game_payload_changed**: False
+- **version_changed**: False
+- **canonical_description**: {"file": "dev/marriage_calc_assistant/publishing/description.en.md", "sha256": "db19f1391f1e4a8145a2e25678790c3fe09c62f2f0fe2c202d3cda92dbbfe8d3"}
+- **evidence**: verification-evidence/ck3-1.20.0.3-2026-10-01/player-facing-copy/parley-mca-copy-review.json
+- **evidence_sha256**: cd79399e0132c5cd2977f49c7fd22e22889c5a91743dd3852db31a8c51257edd
+- **note**: User-approved editorial update: keep the current 1.20.0.3 target and practical limitations in public descriptions; retain 1.20.0.2 engine baseline, patch methodology and scoped coverage in developer/audit records. Historical gallery/AGOT context is preserved without public RC build labels. Runtime and immutable release archives are unchanged.

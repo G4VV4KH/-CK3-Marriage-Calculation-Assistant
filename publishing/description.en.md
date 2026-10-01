@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**. Picker checks on 1.20.0.2 passed standalone and with Parley 1.1.0.
+- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**.
 - 🟢 **Standalone:** no other mod required. Parley is optional.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
@@ -60,19 +60,17 @@ Another `gui/interaction_marriage.gui` replacement needs a functional patch; loa
 
 Standalone: enable MCA alone.
 
-**AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. Historical RC3 checks used CK3 1.19.0.6, AGOT 0.5.2.1, Parley 1.0.0, MCA 3.0.1 and adapter 2.2.0; they do not certify this release. The older 2.1 adapter uses a different scoring model.
+**AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. The earlier AGOT setup used CK3 1.19.0.6, AGOT 0.5.2.1, Parley 1.0.0, MCA 3.0.1 and adapter 2.2.0; it does not apply to this release. The older 2.1 adapter uses a different scoring model.
 
 **Historical adapter:** [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_STEAM_URL}}) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
-## Saves and tested scope
-
-**CK3 1.20.0.3:** upstream-script comparison and static regression checks passed; the latest in-game checks were on **1.20.0.2**. No MCA runtime changes were needed for this hotfix.
+## Saves and known limits
 
 Sorting stores a temporary snapshot on the local player; picker cleanup removes it. **Close the marriage picker before saving or disabling MCA**, or inert snapshot variables can remain.
 
-Screenshots show **MCA 3.0.1 on CK3 1.19.0.6**; historical 100%/125% scale checks do not certify this update. Focused **1.20.0.2** checks passed large-list and both-side sorting, tooltip arithmetic, selection and filter/reset behavior. Standalone checks passed with an empty error log; combined Parley/MCA checks also passed.
+Screenshots show **MCA 3.0.1 on CK3 1.19.0.6**; some interface details may differ.
 
-Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and other total conversions remain unverified. Version 3.1.0 updates the arranger portrait and guards scoring/sorting by the actual arranger; core weights and adapter meanings are unchanged.
+Advancing time with a sorted picker open, reloading an active snapshot, multiplayer and other total conversions remain unverified.
 
 ## Feedback and support
 
