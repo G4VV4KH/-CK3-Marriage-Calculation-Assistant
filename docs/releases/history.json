@@ -106,6 +106,32 @@
       },
       "evidence": "Current committed dev runtime and frozen game payload match the build manifest.",
       "note": "Association verified now; this does not assert the original build commit or build time."
+    },
+    {
+      "recorded_at": "2026-10-01T02:45:35+00:00",
+      "status": "VERIFIED_ASSOCIATION",
+      "build_id": "2026-10-01-game-rc11",
+      "mod": "marriage_calc_assistant",
+      "version": "3.1.0",
+      "manifest_sha256": "cba7f92fffdf94b4b5477e9f5627691093826d6bc6d6c60411e0316b7194f92d",
+      "payload_fingerprint": "fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9",
+      "source_fingerprint": "fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9",
+      "current_source_fingerprint": "fc6d62c35e7fad35d8edc7b530efb8dc3322a87f13e218a4931f104858f305c9",
+      "source_matches": true,
+      "payload_files": 17,
+      "source_files": 17,
+      "source_git": {
+        "commit": "494919cf34937c69f42c2f0d6bb3d13164527838",
+        "runtime_tree": "c1340e60668aa338dfafcb48f66a05985b76aad3",
+        "runtime_committed": true
+      },
+      "archive": {
+        "file": "distribution/2026-10-01-game-rc11/marriage_calc_assistant-3.1.0-payload.zip",
+        "sha256": "e6866505d632a933c14186a9535dda95d2af4d74060bd5df6dd207212049833e",
+        "bytes": 805787
+      },
+      "evidence": "Current committed dev runtime and frozen game payload match the build manifest.",
+      "note": "Association verified now; this does not assert the original build commit or build time."
     }
   ]
 }
