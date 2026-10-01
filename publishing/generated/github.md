@@ -79,7 +79,7 @@ For score reports, include the candidate, breakdown, picker side, versions, load
 - [Source and issue reports](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
 - **Email:** g4vv4kh@gmail.com
 
-### [☕ Buy me a coffee on Ko-fi 💛](https://ko-fi.com/g4vv4kh)
+### [Want to support my work? Donate on Ko-fi 💛](https://ko-fi.com/g4vv4kh)
 
 ## Find MCA elsewhere
 
