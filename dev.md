@@ -1,5 +1,7 @@
 # Contributing to Marriage Calculation Assistant
 
+Current compatibility target: **CK3 1.20.0.3**. Its upstream-script comparison and focused static regressions passed without changing MCA runtime bytes; the latest in-game checks remain on **1.20.0.2**. See the hotfix review at the start of [CROZIER-COMPATIBILITY.md](docs/CROZIER-COMPATIBILITY.md).
+
 MCA 3.1.0 source is in `mod/marriage_calc_assistant/`. That folder's preserved 3.0.1 `README.md` describes the baseline scoring, sorting and extension contract; its historical version and AGOT guidance are superseded by the [CK3 1.20 review](docs/CROZIER-COMPATIBILITY.md). The review records the effective-arranger guard, identity-scale correction, source/model results and bounded RC7 native picker observations. Keep a pull request focused, explain the visible before/after behavior, and distinguish source/model evidence from game observations.
 
 ## Ownership

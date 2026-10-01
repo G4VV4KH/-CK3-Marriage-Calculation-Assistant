@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.2**. Picker checks passed standalone and with Parley 1.1.0.
+- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**. Picker checks on 1.20.0.2 passed standalone and with Parley 1.1.0.
 - 🟢 **Standalone:** no other mod required. Parley is optional.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
@@ -65,6 +65,8 @@ Standalone: enable MCA alone.
 **Historical adapter:** AGOT: Marriage Calculation Assistant adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
 ## Saves and tested scope
+
+**CK3 1.20.0.3:** upstream-script comparison and static regression checks passed; the latest in-game checks were on **1.20.0.2**. No MCA runtime changes were needed for this hotfix.
 
 Sorting stores a temporary snapshot on the local player; picker cleanup removes it. **Close the marriage picker before saving or disabling MCA**, or inert snapshot variables can remain.
 

@@ -5,6 +5,30 @@ covers the source rebase, model results and bounded RC7 native UI observations
 below. It does not carry forward the CK3 1.19 / AGOT smoke as CK3 1.20 evidence
 or establish compatibility beyond the tested cases.
 
+## CK3 1.20.0.3 hotfix review, 2026-10-01
+
+Current compatibility target: **CK3 1.20.0.3**, installed Steam build **25652598**.
+All 3,731 retained common, event, GUI and data-binding files from the 1.20.0.2
+build were compared with the updated installation. Eleven files changed, with
+no removals or additions in the captured roots and text extensions. None is
+overridden by MCA. The marriage GUI, inherited character-list row, fonts,
+marriage eligibility scripts, traits, defines and all twenty data-binding files
+are unchanged byte-for-byte. The frozen GUI patch still reconstructs MCA exactly.
+
+Source checks passed **10/10**, Crozier arranger/callback tests **10/10**,
+genetics tests **12/12**, and potential-component tests **15/15**. All seventeen
+production files match the existing RC11 release. MCA remains **3.1.0**, with
+`supported_version="1.20.*"`; this hotfix requires no runtime fix or new package.
+
+This is a source/model review, not a fresh game session. The latest native picker
+checks remain on **1.20.0.2** and their scope and gaps below are unchanged.
+AGOT 0.5.2.1 still targets 1.19.0.6, so the adapter hold remains in effect.
+The local release workspace retains exact hashes and test outputs in
+`verification-evidence/ck3-1.20.0.3-2026-10-01/mca-audit.json`.
+The [official 1.20.0.3 changelog](https://store.steampowered.com/news/app/1158310?emclan=103582791465554434&emgid=684140727200907566)
+provides the upstream hotfix context; installed-file comparison establishes the
+source compatibility finding above.
+
 ## Visible behavior and ownership
 
 ### Standalone correction, 2026-10-01
