@@ -77,7 +77,7 @@ Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
 - [Source and issue reports]({{MCA_GITHUB_URL}})
-- [Contact the author](mailto:{{CONTACT_EMAIL}})
+- [Contact the author: {{CONTACT_EMAIL}}](mailto:{{CONTACT_EMAIL}})
 - [Donation information]({{DONATION_URL}})
 
 ## Find MCA elsewhere

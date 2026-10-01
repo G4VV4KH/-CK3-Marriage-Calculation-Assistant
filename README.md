@@ -77,6 +77,8 @@ Native puppet UI, active-snapshot time advancement, save/reload, multiplayer and
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
 - [Source and issue reports](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
+- [Contact the author: g4vv4kh@gmail.com](mailto:g4vv4kh@gmail.com)
+- [Donation information](https://ko-fi.com/g4vv4kh)
 
 ## Find MCA elsewhere
 
@@ -87,7 +89,7 @@ For score reports, include the candidate, breakdown, picker side, versions, load
 
 ## My mods
 
-- Parley: The Negotiating Table — negotiate complete diplomatic agreements.
+- [Parley: The Negotiating Table](https://steamcommunity.com/sharedfiles/filedetails/?id=3811090081) — negotiate complete diplomatic agreements.
 - Marriage Calculation Assistant — compare marriage candidates with readable scores and sorting.
 - AGOT: Marriage Calculation Assistant — add AGOT candidate potential to MCA.
 
