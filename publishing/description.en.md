@@ -3,9 +3,9 @@
 ## At a glance
 
 - 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**.
-- 🟢 **Standalone:** no other mod required. Parley is optional.
+- 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
-- 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
+- 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
 - 🔴 **Scores measure candidate gameplay potential**, not AI acceptance or a particular marriage's outcome.
 - 🔴 **Marriage-window conflict:** another mod replacing `gui/interaction_marriage.gui` needs a functional compatibility patch.
 - 🔴 **Puppet arrangements use the native list**, without MCA scores or MCA sorting. Current AGOT compatibility is on hold.
@@ -36,7 +36,7 @@ Components and adapter contributions add up to the score. These are comparison w
 
 Court position, arranger opinion, reluctance to release courtiers, hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value are outside the model.
 
-## How to use it
+## Getting started
 
 1. Open a marriage picker and set the game's normal filters.
 2. Hover an **MCA** number to inspect its components.
@@ -76,22 +76,24 @@ Advancing time with a sorted picker open, reloading an active snapshot, multipla
 
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
-- [Source and issue reports]({{MCA_GITHUB_URL}})
-- **Email:** {{CONTACT_EMAIL}}
+[Report an issue on GitHub]({{MCA_GITHUB_URL}}/issues)
+
+Email: {{CONTACT_EMAIL}}
 
 ### [Want to support my work? Donate on Ko-fi 💛]({{DONATION_URL}})
 
-## Find MCA elsewhere
+## Find this mod elsewhere
 
 - [Steam Workshop]({{MCA_STEAM_URL}})
 - [Paradox Mods]({{MCA_PARADOX_URL}})
 - [Nexus Mods]({{MCA_NEXUS_URL}})
 - [GitHub]({{MCA_GITHUB_URL}})
 
-## My mods
+## My other mods
 
-- [Parley: The Negotiating Table]({{PARLEY_STEAM_URL}}) — negotiate complete diplomatic agreements.
-- [Your Own Hegemony]({{HEGEMONY_STEAM_URL}}) — unite imperial crowns under a new hegemony.
-- [Vassalization Extended]({{VE_STEAM_URL}}) — choose the terms of forced vassalization without a target county limit.
+- [Parley: The Negotiating Table]({{PARLEY_STEAM_URL}}) — negotiate diplomatic agreements.
+- [Your Own Hegemony]({{HEGEMONY_STEAM_URL}}) — found a custom hegemony.
+- [Vassalization Extended]({{VE_STEAM_URL}}) — choose Forced Vassalization terms without a county limit.
+- [Court Automation]({{COURT_STEAM_URL}}) — automate court positions and recruit courtiers or knights.
 
-These mods are optional. [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_GITHUB_URL}}) remains on hold for CK3 1.20.
+These mods are optional.

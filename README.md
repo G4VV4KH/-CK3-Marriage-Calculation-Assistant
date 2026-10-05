@@ -3,9 +3,9 @@
 ## At a glance
 
 - 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**.
-- 🟢 **Standalone:** no other mod required. Parley is optional.
+- 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
-- 🟢 **Nine languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
+- 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
 - 🔴 **Scores measure candidate gameplay potential**, not AI acceptance or a particular marriage's outcome.
 - 🔴 **Marriage-window conflict:** another mod replacing `gui/interaction_marriage.gui` needs a functional compatibility patch.
 - 🔴 **Puppet arrangements use the native list**, without MCA scores or MCA sorting. Current AGOT compatibility is on hold.
@@ -36,7 +36,7 @@ Components and adapter contributions add up to the score. These are comparison w
 
 Court position, arranger opinion, reluctance to release courtiers, hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value are outside the model.
 
-## How to use it
+## Getting started
 
 1. Open a marriage picker and set the game's normal filters.
 2. Hover an **MCA** number to inspect its components.
@@ -76,25 +76,27 @@ Advancing time with a sorted picker open, reloading an active snapshot, multipla
 
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
-- [Source and issue reports](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
-- **Email:** g4vv4kh@gmail.com
+[Report an issue on GitHub](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant/issues)
+
+Email: g4vv4kh@gmail.com
 
 ### [Want to support my work? Donate on Ko-fi 💛](https://ko-fi.com/g4vv4kh)
 
-## Find MCA elsewhere
+## Find this mod elsewhere
 
 - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163)
 - [Paradox Mods](https://mods.paradoxplaza.com/mods/161483/Any)
 - [Nexus Mods](https://www.nexusmods.com/crusaderkings3/mods/400)
 - [GitHub](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
 
-## My mods
+## My other mods
 
-- [Parley: The Negotiating Table](https://steamcommunity.com/sharedfiles/filedetails/?id=3811090081) — negotiate complete diplomatic agreements.
-- [Your Own Hegemony](https://steamcommunity.com/sharedfiles/filedetails/?id=3811201582) — unite imperial crowns under a new hegemony.
-- [Vassalization Extended](https://steamcommunity.com/sharedfiles/filedetails/?id=3813943691) — choose the terms of forced vassalization without a target county limit.
+- [Parley: The Negotiating Table](https://steamcommunity.com/sharedfiles/filedetails/?id=3811090081) — negotiate diplomatic agreements.
+- [Your Own Hegemony](https://steamcommunity.com/sharedfiles/filedetails/?id=3811201582) — found a custom hegemony.
+- [Vassalization Extended](https://steamcommunity.com/sharedfiles/filedetails/?id=3813943691) — choose Forced Vassalization terms without a county limit.
+- [Court Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3814028714) — automate court positions and recruit courtiers or knights.
 
-These mods are optional. [AGOT: Marriage Calculation Assistant](https://github.com/G4VV4KH/-CK3-AGOT-Marriage-Calculation-Assistant) remains on hold for CK3 1.20.
+These mods are optional.
 
 ## Screenshots
 
