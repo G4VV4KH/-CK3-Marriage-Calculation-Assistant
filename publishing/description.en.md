@@ -60,9 +60,9 @@ Another `gui/interaction_marriage.gui` replacement needs a functional patch; loa
 
 Standalone: enable MCA alone.
 
-**AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. The earlier AGOT setup used CK3 1.19.0.6, AGOT 0.5.2.1, Parley 1.0.0, MCA 3.0.1 and adapter 2.2.0; it does not apply to this release. The older 2.1 adapter uses a different scoring model.
+**AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. Earlier AGOT setups do not apply to this release.
 
-**Historical adapter:** [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_STEAM_URL}}) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
+**Held adapter:** [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_GITHUB_URL}}) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
 ## Saves and known limits
 
@@ -91,5 +91,7 @@ For score reports, include the candidate, breakdown, picker side, versions, load
 ## My mods
 
 - [Parley: The Negotiating Table]({{PARLEY_STEAM_URL}}) — negotiate complete diplomatic agreements.
-- [Marriage Calculation Assistant]({{MCA_STEAM_URL}}) — compare marriage candidates with readable scores and sorting.
-- [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_STEAM_URL}}) — add AGOT candidate potential to MCA.
+- [Your Own Hegemony]({{HEGEMONY_STEAM_URL}}) — unite imperial crowns under a new hegemony.
+- [Vassalization Extended]({{VE_STEAM_URL}}) — choose the terms of forced vassalization without a target county limit.
+
+These mods are optional. [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_GITHUB_URL}}) remains on hold for CK3 1.20.

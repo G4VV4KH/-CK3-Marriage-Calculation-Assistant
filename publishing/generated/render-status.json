@@ -1,11 +1,20 @@
 {
   "mod": "marriage_calc_assistant",
-  "missing_metadata": [
-    "AGOT_MCA_STEAM_URL"
-  ],
-  "steam_characters": 6715,
+  "missing_metadata": [],
+  "steam_characters": 6889,
   "steam_under_8000": true,
-  "status": "PREVIEW_METADATA_PENDING",
-  "paradox_format": "Plain text: verify final spacing in the actual upload editor.",
-  "nexus_donation_link": "Omitted; use platform donation field."
+  "steam_bytes": 6927,
+  "steam_under_8000_bytes": true,
+  "status": "COPY_RENDERED",
+  "paradox_format": "paradox.html: native rich-text fragment with linked h3 headings; paradox.txt is reference text only. Verify public rendering after saving.",
+  "paradox_characters": 6303,
+  "paradox_html_characters": 7490,
+  "paradox_under_10000": true,
+  "required_support_local": "PASS",
+  "required_support_public": "NOT_VERIFIED",
+  "nexus_donation_link": "Preserved as the approved size=5 bold linked heading.",
+  "mod_version": "3.1.0",
+  "target_game_version": "1.20.0.3",
+  "nexus_file_version": "3.1.0",
+  "nexus_file_description": "For CK3 1.20.0.3"
 }
