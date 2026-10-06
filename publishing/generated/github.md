@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.3**.
+- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.4**.
 - 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
