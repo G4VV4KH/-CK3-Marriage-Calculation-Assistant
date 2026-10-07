@@ -96,5 +96,6 @@ Email: {{CONTACT_EMAIL}}
 - [Vassalization Extended]({{VE_STEAM_URL}}) — choose Forced Vassalization terms without a county limit.
 - [Court Automation]({{COURT_STEAM_URL}}) — automate court positions and recruit courtiers or knights.
 - [Nomad Autorefill](https://steamcommunity.com/sharedfiles/filedetails/?id=3814793283) — automatically reinforce nomadic Men-at-Arms using herd or gold.
+- [Tax Collection Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815381275) — automatically assign tax collectors and optimize tax jurisdictions.
 
 These mods are optional.
