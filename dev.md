@@ -61,3 +61,7 @@ Use the sibling Parley repository's `tools/release/release_journal.py`; its rele
 Runtime hashes determine dev/game drift; GitHub's published revision is tracked separately so documentation-only commits do not invalidate game bytes. `UPLOADED` and `VERIFIED` require a publication URL, artifact identity and evidence. An upload is not download verification.
 
 RC3 retains the CK3 1.19.0.6 / AGOT 0.5.2.1 evidence scope. MCA 3.1 has a reviewed CK3 1.20.0.2 source rebase and bounded RC7 native UI results; the [compatibility record](docs/CROZIER-COMPATIBILITY.md) keeps native puppet UI, time-advance and save/reload gaps explicit. RC8 passed vanilla Parley/MCA validation for the separate Parley AI-world fix; current AGOT support stays on hold. Earlier results are reused only for unchanged bytes and semantics. The release workspace's `release-workflow.json` manages the publication hold.
+
+## CAA family metadata revision
+
+The current publication copy includes all seven other maintained mods, with Steam Workshop links. Update only the canonical My other mods block and project that block into the existing README and platform outputs; preserve the rest of each platform description. Parley and Vassalization Extended Steam exports use whitespace-only BBCode compaction to remain within the 8,000-byte UTF-8 CRLF form limit. Recheck the current shared publication contract and scoped release metadata guide before publishing. Runtime, version, archives, media, and prior localization evidence are unchanged.
