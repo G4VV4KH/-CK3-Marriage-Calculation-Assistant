@@ -91,12 +91,16 @@ Email: {{CONTACT_EMAIL}}
 
 ## My other mods
 
-- [Parley: The Negotiating Table]({{PARLEY_STEAM_URL}}) — negotiate diplomatic agreements.
-- [Your Own Hegemony]({{HEGEMONY_STEAM_URL}}) — found a custom hegemony.
-- [Vassalization Extended]({{VE_STEAM_URL}}) — choose Forced Vassalization terms without a county limit.
-- [Court Automation]({{COURT_STEAM_URL}}) — automate court positions and recruit courtiers or knights.
+### Standalone mods
+
+- [Parley: The Negotiating Table](https://steamcommunity.com/sharedfiles/filedetails/?id=3811090081) — negotiate diplomatic agreements.
+- [Your Own Hegemony](https://steamcommunity.com/sharedfiles/filedetails/?id=3811201582) — found a custom hegemony.
+- [Vassalization Extended](https://steamcommunity.com/sharedfiles/filedetails/?id=3813943691) — choose Forced Vassalization terms without a county limit.
+- [Court Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3814028714) — automate court positions and recruit courtiers or knights.
 - [Nomad Autorefill](https://steamcommunity.com/sharedfiles/filedetails/?id=3814793283) — automatically reinforce nomadic Men-at-Arms using herd or gold.
 - [Tax Collection Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815381275) — automatically assign tax collectors and optimize tax jurisdictions.
 - [Council Assignment Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815689627) — automate council appointments and optimize councillor assignments.
 
-These mods are optional.
+### Compatibility patches
+
+- [[compatch] CAA + CA](https://steamcommunity.com/sharedfiles/filedetails/?id=3816373375) — use Council Assignment Automation and Council Autopilot together.
