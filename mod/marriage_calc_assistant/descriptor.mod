@@ -1,4 +1,4 @@
-﻿version="3.1.0"
+version="3.1.1"
 name="Marriage Calculation Assistant"
 tags={
 	"1.20 'Crozier'"
@@ -6,3 +6,4 @@ tags={
 	"Utilities"
 }
 supported_version="1.20.*"
+picture="thumbnail.png"

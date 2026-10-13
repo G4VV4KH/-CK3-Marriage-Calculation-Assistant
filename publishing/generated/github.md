@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.4**.
+- 🟢 **Version 3.1.1** · Targets CK3 **1.20.1**.
 - 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
@@ -42,6 +42,8 @@ Court position, arranger opinion, reluctance to release courtiers, hidden fertil
 2. Hover an **MCA** number to inspect its components.
 3. Close the filter panel and choose **MCA: by score** for descending score order. Equal scores keep their current native order; unavailable scores go last.
 4. Choose **Default list** to restore the native ordering and filter controls.
+
+MCA can sort up to **99,999 candidates**; narrow larger lists with the native filters.
 
 The pinned-player row stays pinned. Changing picker side, marriage type or candidate context clears the sorted snapshot. Selecting a moved row selects its displayed character.
 
@@ -105,12 +107,8 @@ Email: g4vv4kh@gmail.com
 
 - [[compatch] CAA + CA](https://steamcommunity.com/sharedfiles/filedetails/?id=3816373375) — use Council Assignment Automation and Council Autopilot together.
 
-## Screenshots
+## Gallery
 
-![Captured on CK3 1.19.0.6: Compare potential spouses from other courts, sorted by MCA score.](publishing/screenshots/01-recipient-candidate-list.png)
+![Compare candidates from other courts.](publishing/media/GALLERY/01-recipient-candidate-list.jpg)
 
-Captured on CK3 1.19.0.6: Compare potential spouses from other courts, sorted by MCA score.
-
-![Captured on CK3 1.19.0.6: Rank candidates from your own court when arranging a marriage with another ruler.](publishing/screenshots/02-sender-candidate-list.png)
-
-Captured on CK3 1.19.0.6: Rank candidates from your own court when arranging a marriage with another ruler.
+![Compare candidates from your own court.](publishing/media/GALLERY/02-sender-candidate-list.jpg)

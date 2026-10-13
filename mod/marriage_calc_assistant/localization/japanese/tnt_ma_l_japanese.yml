@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "並べ替え中…"
  tnt_ma_sort_active:0 "MCA評価順"
  tnt_ma_sort_failed:0 "並べ替えできませんでした"
+ tnt_ma_sort_too_many:0 "候補者が多すぎます。MCAで並べ替えできるのは99,999人までです。通常の一覧で候補者を絞り込み、絞り込み条件を閉じてから、もう一度お試しください。"

@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "Sortowanie…"
  tnt_ma_sort_active:0 "Według oceny MCA"
  tnt_ma_sort_failed:0 "Nie udało się posortować"
+ tnt_ma_sort_too_many:0 "Zbyt wielu kandydatów: MCA może posortować najwyżej 99 999 osób. Zawęź zwykłą listę filtrami, zamknij filtry i spróbuj ponownie."

@@ -18,7 +18,7 @@ function Assert-SortMath {
 
 function Test-SortPermutation {
     param([long[]]$Indices, [int]$Expected)
-    if ($Expected -lt 1 -or $Expected -gt 9999 -or $Indices.Count -ne $Expected) {
+    if ($Expected -lt 1 -or $Expected -gt 99999 -or $Indices.Count -ne $Expected) {
         return $false
     }
     $sortMathOrdered = @($Indices | Sort-Object -Descending)
@@ -35,14 +35,14 @@ function Test-SortPermutation {
 # uses Decimal + Floor to avoid PowerShell's rounded integer-cast semantics.
 $sortMathScoreCases = @([long]-10000, -9999, -1, 0, 1, 9999, 10000)
 $sortMathScoreRecords = [long]0
-for ($sortMathCount = 1; $sortMathCount -le 9999; $sortMathCount++) {
+for ($sortMathCount = 1; $sortMathCount -le 99999; $sortMathCount++) {
     foreach ($sortMathIndex in @([long]0, [long]($sortMathCount - 1))) {
         foreach ($sortMathScore in $sortMathScoreCases) {
-            $sortMathKey = [long](($sortMathScore + 10000L) * 10000L + 9999L - $sortMathIndex)
-            $sortMathDecodedIndex = 9999L - ($sortMathKey % 10000L)
-            $sortMathDecodedScore = [long]([Math]::Floor([decimal]$sortMathKey / 10000D)) - 10000L
-            $sortMathDecodedScoreExactMultiple = [long](([decimal]($sortMathKey - ($sortMathKey % 10000L))) / 10000D) - 10000L
-            Assert-SortMath ($sortMathKey -ge 1 -and $sortMathKey -le 200009999L) 'score-key bounds'
+            $sortMathKey = [long](($sortMathScore + 10000L) * 100000L + 99999L - $sortMathIndex)
+            $sortMathDecodedIndex = 99999L - ($sortMathKey % 100000L)
+            $sortMathDecodedScore = [long]([Math]::Floor([decimal]$sortMathKey / 100000D)) - 10000L
+            $sortMathDecodedScoreExactMultiple = [long](([decimal]($sortMathKey - ($sortMathKey % 100000L))) / 100000D) - 10000L
+            Assert-SortMath ($sortMathKey -ge 1 -and $sortMathKey -le 2000099999L) 'score-key bounds'
             Assert-SortMath ($sortMathDecodedIndex -eq $sortMathIndex) 'score-key index round trip'
             Assert-SortMath ($sortMathDecodedScore -eq $sortMathScore) 'score-key score round trip'
             Assert-SortMath ($sortMathDecodedScoreExactMultiple -eq $sortMathScore) 'score-key remainder-first score round trip'
@@ -54,7 +54,7 @@ for ($sortMathCount = 1; $sortMathCount -le 9999; $sortMathCount++) {
 # Compare packed-key ordering against its semantic definition, including
 # negative scores, frequent ties, sentinel unscored rows, and the maximum N.
 $sortMathOrderRecords = [long]0
-foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999)) {
+foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999, 10000, 20037, 99999)) {
     $sortMathRows = @(
         for ($sortMathIndex = 0; $sortMathIndex -lt $sortMathCount; $sortMathIndex++) {
             $sortMathScore = [long](($sortMathIndex * 37) % 199 - 99)
@@ -63,7 +63,7 @@ foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999)) {
             [pscustomobject]@{
                 Index = [long]$sortMathIndex
                 Score = $sortMathScore
-                Key = [long](($sortMathScore + 10000L) * 10000L + 9999L - $sortMathIndex)
+                Key = [long](($sortMathScore + 10000L) * 100000L + 99999L - $sortMathIndex)
             }
         }
     )
@@ -90,7 +90,7 @@ $sortMathPermutationCases = @(
     @{ Name = 'extra'; Indices = @(0L, 1L, 2L, 3L); Expected = 3; Valid = $false },
     @{ Name = 'empty'; Indices = @(); Expected = 1; Valid = $false },
     @{ Name = 'zero count'; Indices = @(); Expected = 0; Valid = $false },
-    @{ Name = 'oversize count'; Indices = @(); Expected = 10000; Valid = $false }
+    @{ Name = 'oversize count'; Indices = @(); Expected = 100000; Valid = $false }
 )
 foreach ($sortMathCase in $sortMathPermutationCases) {
     $sortMathActual = Test-SortPermutation -Indices $sortMathCase.Indices -Expected $sortMathCase.Expected
@@ -104,7 +104,7 @@ foreach ($sortMathCase in $sortMathPermutationCases) {
 function New-SortReferenceSnapshot {
     param([int]$Expected)
     [pscustomobject]@{
-        State = $(if ($Expected -ge 1 -and $Expected -le 9999) { 1 } else { 3 })
+        State = $(if ($Expected -ge 1 -and $Expected -le 99999) { 1 } else { 3 })
         Expected = $Expected
         Received = 0
         Direction = 0
@@ -141,7 +141,7 @@ function Invoke-SortReferenceCapture {
         return 'failed'
     }
     $Snapshot.References.Add($CandidateReference)
-    $Snapshot.Keys.Add([long](($Score + 10000L) * 10000L + 9999L - $Index))
+    $Snapshot.Keys.Add([long](($Score + 10000L) * 100000L + 99999L - $Index))
     $Snapshot.Received++
     return 'captured'
 }
@@ -162,7 +162,7 @@ function Complete-SortReferenceSnapshot {
 
 function Get-SortReferenceSlot {
     param([int]$NativeIndex, [int]$Expected, [int]$Direction)
-    if ($Expected -lt 1 -or $Expected -gt 9999 -or
+    if ($Expected -lt 1 -or $Expected -gt 99999 -or
         $NativeIndex -lt 0 -or $NativeIndex -ge $Expected -or
         $Direction -notin @(-1, 1)) { throw 'Invalid reference slot arguments' }
     if ($Direction -eq 1) { return $NativeIndex }
@@ -171,7 +171,7 @@ function Get-SortReferenceSlot {
 
 $sortMathReferenceRecords = 0L
 $sortMathTraversalCases = 0
-foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999)) {
+foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999, 10000, 20037, 99999)) {
     $sortMathNativeReferences = @(
         for ($sortMathIndex = 0; $sortMathIndex -lt $sortMathCount; $sortMathIndex++) {
             [pscustomobject]@{ Name = 'same visible name'; NativeIndex = $sortMathIndex }
@@ -205,7 +205,7 @@ foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999)) {
         # slot. Identity must be the same object, not merely an equal label.
         $sortMathSortedKeys = @($sortMathSnapshot.Keys | Sort-Object -Descending)
         for ($sortMathPosition = 0; $sortMathPosition -lt $sortMathCount; $sortMathPosition++) {
-            $sortMathIndex = [int](9999L - ($sortMathSortedKeys[$sortMathPosition] % 10000L))
+            $sortMathIndex = [int](99999L - ($sortMathSortedKeys[$sortMathPosition] % 100000L))
             $sortMathSlot = Get-SortReferenceSlot $sortMathIndex $sortMathCount $sortMathSnapshot.Direction
             Assert-SortMath ([object]::ReferenceEquals($sortMathSnapshot.References[$sortMathSlot], $sortMathNativeReferences[$sortMathIndex])) 'sorted native ordinal retrieves exact captured character reference'
             $sortMathImpostor = [pscustomobject]@{ Name = 'same visible name'; NativeIndex = $sortMathIndex }
@@ -223,7 +223,7 @@ foreach ($sortMathCount in @(1, 2, 3, 17, 256, 9999)) {
 # Slot transformation is an involution. Exhaust all N, probing both endpoints
 # and a middle index without quadratic traversal of every possible count.
 $sortMathSlotCases = 0L
-for ($sortMathCount = 1; $sortMathCount -le 9999; $sortMathCount++) {
+for ($sortMathCount = 1; $sortMathCount -le 99999; $sortMathCount++) {
     foreach ($sortMathIndex in @(0, ($sortMathCount - 1), [int][Math]::Floor($sortMathCount / 2))) {
         foreach ($sortMathDirection in @(1, -1)) {
             $sortMathSlot = Get-SortReferenceSlot $sortMathIndex $sortMathCount $sortMathDirection
@@ -261,7 +261,7 @@ foreach ($sortMathCase in $sortMathRejectedTraversals) {
     Assert-SortMath ($sortMathSnapshot.State -eq 3 -and $sortMathSnapshot.Received -eq $sortMathFailedCount -and $sortMathSnapshot.Keys.Count -eq $sortMathFailedKeys) 'failed snapshot remains unchanged'
 }
 
-foreach ($sortMathCount in @(0, 10000)) {
+foreach ($sortMathCount in @(0, 100000)) {
     $sortMathSnapshot = New-SortReferenceSnapshot -Expected $sortMathCount
     Assert-SortMath ($sortMathSnapshot.State -eq 3) 'invalid count begins failed'
     Assert-SortMath ((Invoke-SortReferenceCapture $sortMathSnapshot 0 ([pscustomobject]@{})) -eq 'noop') 'invalid count never captures'

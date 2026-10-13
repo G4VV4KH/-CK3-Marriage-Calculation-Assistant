@@ -35,6 +35,25 @@ window = {
 		on_start = "[GetScriptedGui('tnt_ma_sort_clear').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 	}
 
+	# The picker hides after native selection; clear its saveable snapshot from
+	# the parent window, where the lifecycle observer remains active.
+	widget = {
+		name = "tnt_ma_sort_selection_cleanup"
+		size = { 1 1 }
+		alwaystransparent = yes
+		state = {
+			name = "tnt_ma_sort_selection_cleanup_active"
+			scale = 1
+			trigger_when = "[And(GetPlayer.IsValid,And(MatchmakerInteractionWindow.HasPickedCharacters,GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').IsSet))]"
+			on_start = "[GetScriptedGui('tnt_ma_sort_clear').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+		}
+		state = {
+			name = "tnt_ma_sort_selection_cleanup_idle"
+			scale = 1
+			trigger_when = "[Not(And(GetPlayer.IsValid,And(MatchmakerInteractionWindow.HasPickedCharacters,GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').IsSet)))]"
+		}
+	}
+
 	vbox = {
 		using = Window_Margins
 
@@ -408,9 +427,9 @@ window = {
 							spacing = 8
 							button_standard = {
 								name = "tnt_ma_sort_start_button"
-								tooltip = "tnt_ma_sort_help"
+								tooltip = "[SelectLocalization( GreaterThan_int32( GetDataModelSize( CharacterSelectionList.GetList ), '(int32)99999' ), 'tnt_ma_sort_too_many', 'tnt_ma_sort_help' )]"
 								size = { 180 30 }
-								enabled = "[And( Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)0' ) ), And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), ObjectsEqual( CharacterInteractionConfirmationWindow.GetPuppetOrActor, GetPlayer ) ), And( Not( CharacterSelectionList.IsBuildingList ), And( Not( CharacterSelectionList.FiltersShown ), And( GreaterThan_int32( GetDataModelSize( CharacterSelectionList.GetList ), '(int32)0' ), LessThanOrEqualTo_int32( GetDataModelSize( CharacterSelectionList.GetList ), '(int32)9999' ) ) ) ) ) )]"
+								enabled = "[And( Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)0' ) ), And( And( ObjectsEqual( CharacterInteractionConfirmationWindow.GetActor, GetPlayer ), ObjectsEqual( CharacterInteractionConfirmationWindow.GetPuppetOrActor, GetPlayer ) ), And( Not( CharacterSelectionList.IsBuildingList ), And( Not( CharacterSelectionList.FiltersShown ), And( GreaterThan_int32( GetDataModelSize( CharacterSelectionList.GetList ), '(int32)0' ), LessThanOrEqualTo_int32( GetDataModelSize( CharacterSelectionList.GetList ), '(int32)99999' ) ) ) ) ) )]"
 								onclick = "[GetScriptedGui('tnt_ma_sort_start').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('tnt_ma_sort_arranger', CharacterInteractionConfirmationWindow.GetPuppetOrActor.MakeScope).AddScope('tnt_ma_sort_n', MakeScopeValue( IntToFixedPoint( GetDataModelSize( CharacterSelectionList.GetList ) ) )).AddScope('tnt_ma_sort_partner', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).AddScope('tnt_ma_sort_secondary_actor', MatchmakerInteractionWindow.GetActorToMatch.MakeScope).AddScope('tnt_ma_sort_secondary_recipient', MatchmakerInteractionWindow.GetRecipientToMatch.MakeScope).AddScope('tnt_ma_sort_side', MakeScopeValue( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, '(CFixedPoint)1', '(CFixedPoint)2' ) )).AddScope('tnt_ma_sort_matrilineal', MakeScopeValue( Select_CFixedPoint( MarriageInteractionWindow.GetMarriageInfo.IsMatrilineal, '(CFixedPoint)1', '(CFixedPoint)0' ) )).AddScope('tnt_ma_sort_day', MakeScopeValue( IntToFixedPoint( GetCurrentDate.GetDateAsTotalDays ) )).End )]"
 								text_single = {
 									parentanchor = center
@@ -549,18 +568,18 @@ window = {
 											state = {
 												name = "tnt_ma_sort_watch_score_invalid"
 												scale = 1
-												trigger_when = "[And( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)2' ), Not( EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), '(CFixedPoint)10000' ), '(CFixedPoint)10000' ) ) ) )]"
+												trigger_when = "[And( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)2' ), Not( EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), '(CFixedPoint)100000' ), '(CFixedPoint)10000' ) ) ) )]"
 												on_start = "[GetScriptedGui('tnt_ma_sort_clear').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 											}
 											state = {
 												name = "tnt_ma_sort_watch_score_idle"
 												scale = 1
-												trigger_when = "[Not( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)2' ), Not( EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), '(CFixedPoint)10000' ), '(CFixedPoint)10000' ) ) ) ) )]"
+												trigger_when = "[Not( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_state').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)2' ), Not( EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), '(CFixedPoint)100000' ), '(CFixedPoint)10000' ) ) ) ) )]"
 											}
 											widget = {
 												size = { 1 1 }
 												alwaystransparent = yes
-												datamodel = "[DataModelSubSpan( GetPlayer.MakeScope.GetList('tnt_ma_sort_candidates'), FixedPointToInt( Select_CFixedPoint( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_direction').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)9999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), Subtract_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_expected').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)9999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ) ) ) ), '(int32)1' )]"
+												datamodel = "[DataModelSubSpan( GetPlayer.MakeScope.GetList('tnt_ma_sort_candidates'), FixedPointToInt( Select_CFixedPoint( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_direction').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)99999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), Subtract_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_expected').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)99999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ) ) ) ), '(int32)1' )]"
 												item = {
 													widget = {
 														size = { 1 1 }
@@ -628,11 +647,11 @@ window = {
 											widget = {
 												size = { 630 110 }
 												name = "tnt_ma_sort_row_score_guard"
-												visible = "[EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), '(CFixedPoint)10000' ), '(CFixedPoint)10000' ) )]"
-												enabled = "[EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), '(CFixedPoint)10000' ), '(CFixedPoint)10000' ) )]"
+												visible = "[EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), '(CFixedPoint)100000' ), '(CFixedPoint)10000' ) )]"
+												enabled = "[EqualTo_CFixedPoint( Select_CFixedPoint( MatchmakerInteractionWindow.IsPickingSecondaryActor, GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).AddScope('tnt_gr_p', CharacterInteractionConfirmationWindow.GetRecipient.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_p_alliance_capture_value', 'tnt_ma_sort_p_capture_value' ) ), GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).AddScope('actor', GetPlayer.MakeScope).ScriptValue( Select_CString( DataModelHasItems( CharacterListItem.GetOtherCharacterItems ), 'tnt_ma_sort_r_alliance_capture_value', 'tnt_ma_sort_r_capture_value' ) ) ), Subtract_CFixedPoint( Divide_CFixedPoint( Subtract_CFixedPoint( Scope.GetValue, Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), '(CFixedPoint)100000' ), '(CFixedPoint)10000' ) )]"
 												widget = {
 													size = { 630 110 }
-													datamodel = "[DataModelSubSpan( GetPlayer.MakeScope.GetList('tnt_ma_sort_candidates'), FixedPointToInt( Select_CFixedPoint( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_direction').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)9999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ), Subtract_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_expected').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)9999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)10000' ) ) ) ) ), '(int32)1' )]"
+													datamodel = "[DataModelSubSpan( GetPlayer.MakeScope.GetList('tnt_ma_sort_candidates'), FixedPointToInt( Select_CFixedPoint( EqualTo_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_direction').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)99999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ), Subtract_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.GetVariable('tnt_ma_sort_expected').GetValueWithDefault('(CFixedPoint)0'), '(CFixedPoint)1' ), Subtract_CFixedPoint( '(CFixedPoint)99999', Modulo_CFixedPoint( Scope.GetValue, '(CFixedPoint)100000' ) ) ) ) ), '(int32)1' )]"
 													item = {
 														widget = {
 															size = { 630 110 }
@@ -665,13 +684,13 @@ window = {
 
 								# Faith
 								icon = {
-									name = "faith_button"
-									datacontext = "[Character.GetFaith]"
+									name = "rite_button"
+									datacontext = "[Character.GetRite]"
 									size = { 35 35 }
-									texture = "[Faith.GetIcon]"
+									texture = "[Rite.GetIcon]"
 
 									tooltipwidget = {
-										faith_tooltip = {}
+										rite_tooltip = {}
 									}
 								}
 

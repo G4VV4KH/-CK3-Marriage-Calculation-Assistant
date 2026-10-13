@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "Sortierung…"
  tnt_ma_sort_active:0 "Nach MCA-Wertung"
  tnt_ma_sort_failed:0 "Sortieren fehlgeschlagen"
+ tnt_ma_sort_too_many:0 "Zu viele Kandidaten: MCA kann bis zu 99.999 sortieren. Schränken Sie die normale Liste mit Filtern ein, schließen Sie die Filter und versuchen Sie es erneut."

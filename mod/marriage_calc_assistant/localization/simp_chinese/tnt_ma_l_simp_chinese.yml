@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "排序中…"
  tnt_ma_sort_active:0 "按MCA评分"
  tnt_ma_sort_failed:0 "无法排序"
+ tnt_ma_sort_too_many:0 "候选人过多：MCA最多可为99,999名候选人排序。请在普通列表中使用筛选条件缩小范围，关闭筛选面板后重试。"

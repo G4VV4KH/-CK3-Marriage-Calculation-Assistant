@@ -1,4 +1,4 @@
-<#
+﻿<#
 Read-only MCA source checks. NOT a CK3 parser or a runtime/UI test.
 The frozen GUI patch applies to pinned vanilla after CRLF -> LF normalization;
 reconstruction must equal the pinned production GUI. No files are written.
@@ -261,10 +261,10 @@ try {
     })
     Assert-Set $collisions @('gui/interaction_marriage.gui') 'Vanilla path allowlist'
     $descriptor = Read-Utf8 (Join-Path $mod 'descriptor.mod')
-    Assert-True ((Count-Matches $descriptor '(?m)^version\s*=\s*"3\.1\.0"\s*$') -eq 1) 'Expected MCA descriptor version 3.1.0'
+    Assert-True ((Count-Matches $descriptor '(?m)^version\s*=\s*"3\.1\.1"\s*$') -eq 1) 'Expected MCA descriptor version 3.1.1'
     Assert-True ((Count-Matches $descriptor '(?m)^supported_version\s*=\s*"1\.20\.\*"\s*$') -eq 1) 'Expected reviewed CK3 supported_version 1.20.*'
     Assert-True (-not [regex]::IsMatch((Remove-ScriptComments $descriptor), '\bdependencies\s*=')) 'Standalone dependency: MCA must declare no required mod'
-    Pass 'exact 18-file inventory; version 3.1.0; only marriage GUI collides with vanilla'
+    Pass 'exact 18-file inventory; version 3.1.1; only marriage GUI collides with vanilla'
 
     foreach ($file in $runtime) {
         $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
@@ -282,10 +282,10 @@ try {
 
     $marriagePath = Join-Path $mod 'gui/interaction_marriage.gui'
     $vanillaPath = Join-Path $game 'gui/interaction_marriage.gui'
-    $patchPath = Join-Path $PSScriptRoot 'interaction_marriage.ck3-1.20.patch'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $vanillaPath).Hash -ceq '8AB7AA6C6B4B778E8AAD62B06768B166996E9DAB5B5400CDDD56C7F5822CF6AD') 'Vanilla marriage GUI fingerprint changed; review patch against the new game file'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $patchPath).Hash -ceq '06BEA5CA90317C4ADFDE1F5E1713F7333683717ADB07284B418A3ADE4FF8A695') 'Frozen marriage patch changed'
-    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $marriagePath).Hash -ceq 'AA033AE800C5F23ED7BFBFA58FFAC6A7E972B796498F9FD9738778087948163E') 'Production marriage GUI fingerprint changed; review and regenerate its frozen patch'
+    $patchPath = Join-Path $PSScriptRoot 'interaction_marriage.ck3-1.20.1.patch'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $vanillaPath).Hash -ceq '88708B2E9E5890CC3E9E3D64D3914E43A581BC25C38736376CFA41D421675E37') 'Vanilla marriage GUI fingerprint changed; review patch against the new game file'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $patchPath).Hash -ceq 'CECB4C7B538A8731D04C46783388A87FEFA6C295F3E4392D39AD402A6BBE47A1') 'Frozen marriage patch changed'
+    Assert-True ((Get-FileHash -Algorithm SHA256 -LiteralPath $marriagePath).Hash -ceq '3BAC12A2EB066F5E746606E28B98D10503807E428FE1862A25BBB449DEB90A63') 'Production marriage GUI fingerprint changed; review and regenerate its frozen patch'
     $marriage = Read-Utf8 $marriagePath
     $rebuilt = Apply-FrozenPatchInMemory (Read-Utf8 $vanillaPath) (Read-Utf8 $patchPath)
     Assert-True ($rebuilt -ceq $marriage) 'Frozen patch does not reconstruct the exact LF production GUI'
@@ -387,7 +387,7 @@ try {
     Assert-True (-not [regex]::IsMatch($sg, '\bdebug_log(?:_scopes)?\b|MCA_SORT_(?:STAGE|NEXT|MATRIX)|tnt_ma_sort_id_(?:lo|hi)')) 'Diagnostic logs or retired limb identity leaked into production'
     Pass '39 unique values, symmetric potential components, eight retired zero stubs, unchanged exact-grade sorting'
 
-    $locKeys = @('tnt_ma_sort_score_button','tnt_ma_sort_native_button','tnt_ma_sort_help','tnt_ma_sort_collecting','tnt_ma_sort_active','tnt_ma_sort_failed')
+    $locKeys = @('tnt_ma_sort_score_button','tnt_ma_sort_native_button','tnt_ma_sort_help','tnt_ma_sort_collecting','tnt_ma_sort_active','tnt_ma_sort_failed','tnt_ma_sort_too_many')
     $allLocKeys = @(
         'tnt_ma_grade_genetic','tnt_ma_grade_title','tnt_ma_grade_help',
         'tnt_ma_grade_skill','tnt_ma_grade_age','tnt_ma_grade_dynasty','tnt_ma_grade_claim',
@@ -398,18 +398,18 @@ try {
         $loc = Read-Utf8 (Join-Path $mod "localization/$lang/tnt_ma_l_$lang.yml")
         Assert-True ($loc.StartsWith("l_$($lang):" + $Lf)) "Wrong locale header: $lang"
         $found = @([regex]::Matches($loc, '(?m)^\s*(tnt_ma_[a-z_0-9]+):\d*\s+') | ForEach-Object { $_.Groups[1].Value })
-        Assert-Set $found $allLocKeys "Twenty-two core localization keys in $lang"
+        Assert-Set $found $allLocKeys "Twenty-three core localization keys in $lang"
         foreach ($key in $allLocKeys) {
             Assert-True ([regex]::IsMatch($loc, '(?m)^\s*' + $key + ':\d*\s+"[^"\r\n]+"\s*$')) "Missing/empty single-line localization $lang/$key"
         }
     }
     Assert-True ((Count-Matches $marriage 'text\s*=\s*"tnt_ma_sort_score_button"') -eq 1) 'Score button localization binding'
     Assert-True ((Count-Matches $marriage 'text\s*=\s*"tnt_ma_sort_native_button"') -eq 1) 'Native button localization binding'
-    Assert-True ((Count-Matches $marriage 'tooltip\s*=\s*"tnt_ma_sort_help"') -eq 2) 'Shared sorter help bindings'
+    Assert-True ((Count-Matches $marriage 'tooltip\s*=\s*"tnt_ma_sort_help"') -eq 1) 'Native sorter help binding'
     foreach ($key in @('tnt_ma_sort_collecting','tnt_ma_sort_active','tnt_ma_sort_failed')) {
         Assert-True ((Count-Matches $marriage ([regex]::Escape("'" + $key + "'"))) -eq 1) "State label binding: $key"
     }
-    Pass 'all 22 core keys exist once in all nine locales; six control keys are GUI-bound'
+    Pass 'all 23 core keys exist once in all nine locales; seven control keys are GUI-bound'
 
     foreach ($file in @($runtime | Where-Object { $_.Extension -in @('.txt','.gui','.mod') })) {
         $text = Read-Utf8 $file.FullName

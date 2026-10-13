@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant",
+  "version": "3.1.1",
+  "target": "1.20.1",
+  "overlay": true,
+  "preserve_existing_repository_history_and_unlisted_files": true,
+  "gameplay_evidence": "Tested DEV snapshot; exported gameplay unchanged. Full developer evidence retained in local release journal."
+}

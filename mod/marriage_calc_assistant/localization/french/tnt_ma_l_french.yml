@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "Tri en cours…"
  tnt_ma_sort_active:0 "Par score MCA"
  tnt_ma_sort_failed:0 "Échec du tri"
+ tnt_ma_sort_too_many:0 "Trop de candidats : MCA peut en trier jusqu’à 99 999. Réduisez la liste normale avec les filtres, fermez les filtres, puis réessayez."

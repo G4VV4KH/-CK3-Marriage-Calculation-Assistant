@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.0** · Targets CK3 **1.20.0.4**.
+- 🟢 **Version 3.1.1** · Targets CK3 **1.20.1**.
 - 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
@@ -43,6 +43,8 @@ Court position, arranger opinion, reluctance to release courtiers, hidden fertil
 3. Close the filter panel and choose **MCA: by score** for descending score order. Equal scores keep their current native order; unavailable scores go last.
 4. Choose **Default list** to restore the native ordering and filter controls.
 
+MCA can sort up to **99,999 candidates**; narrow larger lists with the native filters.
+
 The pinned-player row stays pinned. Changing picker side, marriage type or candidate context clears the sorted snapshot. Selecting a moved row selects its displayed character.
 
 MCA scores and sorting apply when arranging as your own ruler. Switching to a puppet clears the sorted snapshot and uses CK3's native list without MCA scores or sorting.
@@ -62,7 +64,7 @@ Standalone: enable MCA alone.
 
 **AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. Earlier AGOT setups do not apply to this release.
 
-**Held adapter:** [AGOT: Marriage Calculation Assistant]({{AGOT_MCA_GITHUB_URL}}) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
+**Held adapter:** [AGOT: Marriage Calculation Assistant](https://github.com/G4VV4KH/-CK3-AGOT-Marriage-Calculation-Assistant) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
 ## Saves and known limits
 
@@ -76,18 +78,18 @@ Advancing time with a sorted picker open, reloading an active snapshot, multipla
 
 For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
 
-[Report an issue on GitHub]({{MCA_GITHUB_URL}}/issues)
+[Report an issue on GitHub](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant/issues)
 
-Email: {{CONTACT_EMAIL}}
+Email: g4vv4kh@gmail.com
 
-### [Want to support my work? Donate on Ko-fi 💛]({{DONATION_URL}})
+### [Want to support my work? Donate on Ko-fi 💛](https://ko-fi.com/g4vv4kh)
 
 ## Find this mod elsewhere
 
-- [Steam Workshop]({{MCA_STEAM_URL}})
-- [Paradox Mods]({{MCA_PARADOX_URL}})
-- [Nexus Mods]({{MCA_NEXUS_URL}})
-- [GitHub]({{MCA_GITHUB_URL}})
+- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163)
+- [Paradox Mods](https://mods.paradoxplaza.com/mods/161483/Any)
+- [Nexus Mods](https://www.nexusmods.com/crusaderkings3/mods/400)
+- [GitHub](https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant)
 
 ## My other mods
 

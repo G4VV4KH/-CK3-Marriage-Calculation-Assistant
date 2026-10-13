@@ -21,3 +21,4 @@
  tnt_ma_sort_collecting:0 "Ordenando…"
  tnt_ma_sort_active:0 "Por puntuación MCA"
  tnt_ma_sort_failed:0 "No se pudo ordenar"
+ tnt_ma_sort_too_many:0 "Demasiados candidatos: MCA puede ordenar hasta 99 999. Reduce la lista normal con los filtros, cierra los filtros y vuelve a intentarlo."

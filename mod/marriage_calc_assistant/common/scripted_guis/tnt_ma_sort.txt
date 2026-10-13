@@ -6,7 +6,9 @@
 # Capture reuses the displayed grade values plus native alliance metadata.
 # CK3 1.20: only direct player arrangements can create/use this snapshot.
 # The effective arranger is a fresh GUI input, never persistent state.
-# Packed key = (rounded score + 10000) * 10000 + 9999 - native index.
+# Packed key = (rounded score + 10000) * 100000 + 99999 - native index.
+# Up to 99999 candidates; largest key 2000099999 stays below signed int32 max.
+# Score offset remains 10000; only the native-index radix was expanded.
 # Sort descending by score; equal scores preserve native order. Every key
 # round-trips exactly before capture. Three ordered passes validate indices
 # and build sorted/native-index views without per-row membership scans.
@@ -46,7 +48,7 @@ tnt_ma_sort_start = {
 				exists = scope:tnt_ma_sort_matrilineal
 				exists = scope:tnt_ma_sort_day
 				scope:tnt_ma_sort_n > 0
-				scope:tnt_ma_sort_n < 10000
+				scope:tnt_ma_sort_n < 100000
 				OR = { scope:tnt_ma_sort_side = 1 scope:tnt_ma_sort_side = 2 }
 				OR = { scope:tnt_ma_sort_matrilineal = 0 scope:tnt_ma_sort_matrilineal = 1 }
 			}
@@ -237,8 +239,8 @@ tnt_ma_sort_collect = {
 							value = {
 								value = scope:tnt_ma_sort_integer_score
 								add = 10000
-								multiply = 10000
-								add = 9999
+								multiply = 100000
+								add = 99999
 								subtract = scope:tnt_ma_sort_integer_index
 							}
 						}
@@ -246,17 +248,17 @@ tnt_ma_sort_collect = {
 							name = tnt_ma_sort_decoded_index
 							value = {
 								value = scope:tnt_ma_sort_key
-								modulo = 10000
+								modulo = 100000
 								multiply = -1
-								add = 9999
+								add = 99999
 							}
 						}
 						save_scope_value_as = {
 							name = tnt_ma_sort_decoded_score
 							value = {
 								value = scope:tnt_ma_sort_key
-								subtract = { value = scope:tnt_ma_sort_key modulo = 10000 }
-								divide = 10000
+								subtract = { value = scope:tnt_ma_sort_key modulo = 100000 }
+								divide = 100000
 								subtract = 10000
 							}
 						}
@@ -383,7 +385,7 @@ tnt_ma_sort_finalize = {
 						root = {
 							save_scope_value_as = {
 								name = tnt_ma_sort_output_index
-								value = { value = scope:tnt_ma_sort_item modulo = 10000 multiply = -1 add = 9999 }
+								value = { value = scope:tnt_ma_sort_item modulo = 100000 multiply = -1 add = 99999 }
 							}
 							add_to_variable_list = { name = tnt_ma_sort_indices target = scope:tnt_ma_sort_output_index }
 							add_to_variable_list = { name = tnt_ma_sort_keys target = scope:tnt_ma_sort_item }
@@ -394,12 +396,12 @@ tnt_ma_sort_finalize = {
 					set_variable = { name = tnt_ma_sort_output_count value = 0 }
 					ordered_in_list = {
 						variable = tnt_ma_sort_packed
-						order_by = { save_temporary_scope_as = tnt_ma_sort_order_key value = scope:tnt_ma_sort_order_key modulo = 10000 }
+						order_by = { save_temporary_scope_as = tnt_ma_sort_order_key value = scope:tnt_ma_sort_order_key modulo = 100000 }
 						max = var:tnt_ma_sort_expected
 						check_range_bounds = no
 						save_temporary_scope_as = tnt_ma_sort_item
 						root = {
-							save_scope_value_as = { name = tnt_ma_sort_output_index value = { value = scope:tnt_ma_sort_item modulo = 10000 multiply = -1 add = 9999 } }
+							save_scope_value_as = { name = tnt_ma_sort_output_index value = { value = scope:tnt_ma_sort_item modulo = 100000 multiply = -1 add = 99999 } }
 							if = {
 								limit = { scope:tnt_ma_sort_output_index = var:tnt_ma_sort_output_count }
 								add_to_variable_list = { name = tnt_ma_sort_keys_by_index target = scope:tnt_ma_sort_item }
