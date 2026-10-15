@@ -1,11 +1,11 @@
 {
   "title": "Marriage Calculation Assistant",
   "mod_version": "3.1.1",
-  "target_game_version": "1.20.1",
+  "target_game_version": "1.20.1.1",
   "nexus_file_version": "3.1.1",
-  "nexus_file_description": "For CK3 1.20.1",
-  "nexus_file_id": null,
-  "new_file_required": true,
+  "nexus_file_description": "For CK3 1.20.1.1",
+  "nexus_file_id": "2624",
+  "new_file_required": false,
   "platform_urls": {
     "steam": "https://steamcommunity.com/sharedfiles/filedetails/?id=3811100163",
     "paradox": "https://mods.paradoxplaza.com/mods/161483/Any",

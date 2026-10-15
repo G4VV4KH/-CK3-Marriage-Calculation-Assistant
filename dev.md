@@ -65,3 +65,11 @@ RC3 retains the CK3 1.19.0.6 / AGOT 0.5.2.1 evidence scope. MCA 3.1 has a review
 ## CAA family metadata revision
 
 The current publication copy includes all seven other maintained mods, with Steam Workshop links. Update only the canonical My other mods block and project that block into the existing README and platform outputs; preserve the rest of each platform description. Parley and Vassalization Extended Steam exports use whitespace-only BBCode compaction to remain within the 8,000-byte UTF-8 CRLF form limit. Recheck the current shared publication contract and scoped release metadata guide before publishing. Runtime, version, archives, media, and prior localization evidence are unchanged.
+
+## Compatibility metadata — CK3 1.20.1.1 (2026-10-15)
+
+Version 3.1.1 now targets CK3 1.20.1.1 (Steam build 25913294). This is a publication metadata update; runtime files, mod version, release history and existing download archives are unchanged.
+
+The upstream comparison used the complete Steam manifests for 1.20.1 and 1.20.1.1 and verified the installed main game, Windows and launcher files against the current manifests. All main-game GUI files and gameplay scripts used by this mod retain their upstream hashes; changes are concentrated in translations, name equivalency and French customizable localization. The executable changed. Mod-specific source and localization checks are recorded in the maintained compatibility assessment and release journal.
+
+Earlier native reports retain their original source, game build and scenario coverage. This metadata revision does not claim a fresh native PASS on 1.20.1.1. Visual layout, multiplayer and performance retain their previously recorded limits. Edit the canonical publication source and regenerate its current outputs; preserve historical release records.

@@ -1,9 +1,11 @@
 {
   "mod": "marriage_calc_assistant",
   "mod_version": "3.1.1",
-  "target_game_version": "1.20.1",
+  "target_game_version": "1.20.1.1",
   "contract_version": "1.8.0",
   "local_copy_validation": "PASS",
   "native_evidence": "Tested DEV snapshot; 26 assertions passed in the copied Dobronega save. Scope remains MCA-only, not the original full playset.",
-  "public_verification": "Publication receipt is maintained separately."
+  "public_verification": "Publication receipt is maintained separately.",
+  "compatibility_metadata_revision": "ck3-1.20.1.1-metadata-2026-10-15-r1",
+  "native_evidence_scope": "Prior native evidence retains its original source, game build and scenario scope; this metadata-only update does not claim a fresh native PASS on CK3 1.20.1.1."
 }
