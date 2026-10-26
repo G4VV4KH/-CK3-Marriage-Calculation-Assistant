@@ -13,13 +13,13 @@
 
 ## Find the person behind the list
 
-A useful claim, an exceptional mind or a powerful ally: find promising names in a long marriage list and see what makes them stand out.
+Find promising claims, exceptional minds or powerful allies in a long marriage list, and see what makes each candidate stand out.
 
 ## Compare candidates without losing the details
 
 Hover an **MCA** score for its component breakdown. Choose **MCA: by score** to bring the highest-scoring candidates to the top.
 
-Compare candidates from other courts or your own, using the same core weights. Adapters can add setting-specific opportunities.
+Compare candidates from any court with the same core weights. Adapters can add setting-specific opportunities.
 
 Scores do not change acceptance or modify candidates. MCA points are separate from Parley's treaty score.
 
@@ -32,7 +32,7 @@ Scores do not change acceptance or modify candidates. MCA points are separate fr
 - **Explicit claims:** the strongest contributes up to 24; pressed claims weigh twice as much as unpressed claims of the same rank. Marriage does not immediately transfer claims or titles.
 - **Potential alliance:** up to 100 from the ally's military strength relative to yours, only when the native row reports it. Assistance is not guaranteed.
 
-Components and adapter contributions add up to the score. These are comparison weights, not percentages or a shared resource. Inspect the breakdown for what matters to your plans.
+Components and adapters contribute to the score: comparison weights, not percentages or a shared resource. Inspect the breakdown for what matters to your plans.
 
 Court position, arranger opinion, reluctance to release courtiers, hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value are outside the model.
 
@@ -102,6 +102,7 @@ Email: g4vv4kh@gmail.com
 - [Nomad Autorefill](https://steamcommunity.com/sharedfiles/filedetails/?id=3814793283) — automatically reinforce nomadic Men-at-Arms using herd or gold.
 - [Tax Collection Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815381275) — automatically assign tax collectors and optimize tax jurisdictions.
 - [Council Assignment Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815689627) — automate council appointments and optimize councillor assignments.
+- [Strategist Assistant](https://steamcommunity.com/sharedfiles/filedetails/?id=3827659479) — plan armies, recruitment and wars.
 
 ### Compatibility patches
 
