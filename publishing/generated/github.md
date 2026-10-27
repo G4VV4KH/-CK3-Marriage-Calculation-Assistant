@@ -13,11 +13,11 @@
 
 ## Find the person behind the list
 
-Find promising claims, exceptional minds or powerful allies in a long marriage list, and see what makes each candidate stand out.
+Find promising claims, exceptional minds or powerful allies, and see why each candidate stands out.
 
 ## Compare candidates without losing the details
 
-Hover an **MCA** score for its component breakdown. Choose **MCA: by score** to bring the highest-scoring candidates to the top.
+Hover an **MCA** score for its breakdown. Choose **MCA: by score** to rank candidates highest first.
 
 Compare candidates from any court with the same core weights. Adapters can add setting-specific opportunities.
 
@@ -45,9 +45,9 @@ Court position, arranger opinion, reluctance to release courtiers, hidden fertil
 
 MCA can sort up to **99,999 candidates**; narrow larger lists with the native filters.
 
-The pinned-player row stays pinned. Changing picker side, marriage type or candidate context clears the sorted snapshot. Selecting a moved row selects its displayed character.
+The player row stays pinned. Changing picker side, marriage type or candidate context clears sorting. Moved rows select their displayed characters.
 
-MCA scores and sorting apply when arranging as your own ruler. Switching to a puppet clears the sorted snapshot and uses CK3's native list without MCA scores or sorting.
+MCA scores and sorting apply to your own ruler. Switching to a puppet clears sorting and uses CK3's native list without MCA scores or sorting.
 
 ## Compatibility and load order
 
@@ -103,6 +103,7 @@ Email: g4vv4kh@gmail.com
 - [Tax Collection Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815381275) — automatically assign tax collectors and optimize tax jurisdictions.
 - [Council Assignment Automation](https://steamcommunity.com/sharedfiles/filedetails/?id=3815689627) — automate council appointments and optimize councillor assignments.
 - [Strategist Assistant](https://steamcommunity.com/sharedfiles/filedetails/?id=3827659479) — plan armies, recruitment and wars.
+- [Title Domination](https://steamcommunity.com/sharedfiles/filedetails/?id=3828276945) — proclaim uncreated titles through diplomacy and war.
 
 ### Compatibility patches
 
