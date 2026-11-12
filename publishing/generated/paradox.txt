@@ -13,13 +13,13 @@ At a glance
 
 Find the person behind the list
 
-Find promising claims, exceptional minds or powerful allies, and see why each candidate stands out.
+Find promising claims, exceptional minds or powerful allies, and see each candidate's strengths.
 
 Compare candidates without losing the details
 
 Hover an MCA score for its breakdown. Choose MCA: by score to rank candidates highest first.
 
-Compare candidates from any court with the same core weights. Adapters can add setting-specific opportunities.
+Compare any court's candidates with the same core weights; adapters can add setting-specific opportunities.
 
 Scores do not change acceptance or modify candidates. MCA points are separate from Parley's treaty score.
 
@@ -32,26 +32,26 @@ What the score includes
 - Explicit claims: the strongest contributes up to 24; pressed claims weigh twice as much as unpressed claims of the same rank. Marriage does not immediately transfer claims or titles.
 - Potential alliance: up to 100 from the ally's military strength relative to yours, only when the native row reports it. Assistance is not guaranteed.
 
-Components and adapters contribute to the score: comparison weights, not percentages or a shared resource. Inspect the breakdown for what matters to your plans.
+Components and adapters add comparison weights, not percentages or a shared resource. Inspect the breakdown for your priorities.
 
-Court position, arranger opinion, reluctance to release courtiers, hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value are outside the model.
+Excluded: court position, arranger opinion, reluctance to release courtiers, hidden fertility/health, secret parentage, predicted children, succession queues and the selected couple's full value.
 
 Getting started
 
 1. Open a marriage picker and set the game's normal filters.
 2. Hover an MCA number to inspect its components.
-3. Close the filter panel and choose MCA: by score for descending score order. Equal scores keep their current native order; unavailable scores go last.
+3. Close filters; choose MCA: by score for descending scores. Ties keep native order; unavailable scores go last.
 4. Choose Default list to restore the native ordering and filter controls.
 
 MCA can sort up to 99,999 candidates; narrow larger lists with the native filters.
 
 The player row stays pinned. Changing picker side, marriage type or candidate context clears sorting. Moved rows select their displayed characters.
 
-MCA scores and sorting apply to your own ruler. Switching to a puppet clears sorting and uses CK3's native list without MCA scores or sorting.
+MCA scores and sorting apply to your ruler. Switching to a puppet clears sorting and restores CK3's native list without MCA scores or sorting.
 
 Compatibility and load order
 
-Vanilla file replacement: gui/interaction_marriage.gui. MCA supplies its own score interface, sorting and cleanup. It does not replace gui/shared/lists.gui, arrange_marriage_interaction or marry_off_interaction.
+Vanilla file replacement: gui/interaction_marriage.gui, adding scores, sorting and cleanup. Does not replace gui/shared/lists.gui, arrange_marriage_interaction or marry_off_interaction.
 
 Another gui/interaction_marriage.gui replacement needs a functional patch; load order cannot merge files. A mod changing only gui/shared/lists.gui can work if its row retains vanilla's character_relation block in the name/age column. This is not blanket list-mod compatibility.
 
@@ -68,7 +68,7 @@ Held adapter: AGOT: Marriage Calculation Assistant: https://github.com/G4VV4KH/-
 
 Saves and known limits
 
-Sorting stores a temporary snapshot on the local player; picker cleanup removes it. Close the marriage picker before saving or disabling MCA, or inert snapshot variables can remain.
+Sorting stores a temporary local-player snapshot, removed by picker cleanup. Close the marriage picker before saving or disabling MCA, or inert snapshot variables can remain.
 
 Screenshots show MCA 3.0.1 on CK3 1.19.0.6; some interface details may differ.
 
@@ -76,7 +76,7 @@ Advancing time with a sorted picker open, reloading an active snapshot, multipla
 
 Feedback and support
 
-For score reports, include the candidate, breakdown, picker side, versions, load order and a screenshot; add resolution and UI scale for interface problems.
+Report candidate, breakdown, picker side, versions, load order and screenshot; add resolution and UI scale for interface issues.
 
 Report an issue on GitHub: https://github.com/G4VV4KH/-CK3-Marriage-Calculation-Assistant/issues
 
@@ -104,6 +104,7 @@ Standalone mods
 - Council Assignment Automation: https://steamcommunity.com/sharedfiles/filedetails/?id=3815689627 — automate council appointments and optimize councillor assignments.
 - Strategist Assistant: https://steamcommunity.com/sharedfiles/filedetails/?id=3827659479 — plan armies, recruitment and wars.
 - Title Domination: https://steamcommunity.com/sharedfiles/filedetails/?id=3828276945 — proclaim uncreated titles through diplomacy and war.
+- Accolade Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3836819350 — choose accolade attributes or knights first and set rank limits.
 
 Compatibility patches
 
