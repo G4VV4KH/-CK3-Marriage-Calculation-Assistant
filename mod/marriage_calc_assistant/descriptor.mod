@@ -1,9 +1,9 @@
-version="3.1.1"
+version="3.1.2"
 name="Marriage Calculation Assistant"
 tags={
-	"1.20 'Crozier'"
+	"1.21 'Florin'"
 	"Interface"
 	"Utilities"
 }
-supported_version="1.20.*"
+supported_version="1.21.*"
 picture="thumbnail.png"

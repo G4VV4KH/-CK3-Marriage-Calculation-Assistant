@@ -2,7 +2,7 @@
 
 ## At a glance
 
-- 🟢 **Version 3.1.1** · Targets CK3 **1.20.1.2**.
+- 🟢 **Version 3.1.2** · Targets CK3 **1.21.0.3**.
 - 🟢 **Standalone:** no other mod required.
 - 🟢 **Candidate scores, hover breakdowns and optional score sorting** in the marriage picker.
 - 🟢 **Languages:** English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese and Spanish.
@@ -62,7 +62,7 @@ Another `gui/interaction_marriage.gui` replacement needs a functional patch; loa
 
 Standalone: enable MCA alone.
 
-**AGOT compatibility is on hold** pending upstream CK3 1.20 support and fresh combined checks. Earlier AGOT setups do not apply to this release.
+**AGOT compatibility is on hold** pending fresh combined checks for CK3 1.21. Earlier AGOT setups do not apply to this release.
 
 **Held adapter:** [AGOT: Marriage Calculation Assistant](https://github.com/G4VV4KH/-CK3-AGOT-Marriage-Calculation-Assistant) adds current-dragonrider potential without a replacement GUI. No additional interface patches are included. Enable one copy of each mod.
 
