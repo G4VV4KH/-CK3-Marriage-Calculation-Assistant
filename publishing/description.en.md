@@ -110,3 +110,4 @@ Email: g4vv4kh@gmail.com
 ### Compatibility patches
 
 - [[compatch] CAA + CA](https://steamcommunity.com/sharedfiles/filedetails/?id=3816373375) — use Council Assignment Automation and Council Autopilot together.
+- [[compatch] SA + NA](https://steamcommunity.com/sharedfiles/filedetails/?id=3846587662) — use Strategist Assistant and Nomad Autorefill in the same Military window.
