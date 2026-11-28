@@ -106,6 +106,7 @@ Email: g4vv4kh@gmail.com
 - [Title Domination](https://steamcommunity.com/sharedfiles/filedetails/?id=3828276945) — proclaim uncreated titles through diplomacy and war.
 - [Accolade Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3836819350) — choose accolade attributes or knights first and set rank limits.
 - [Traitor Trials](https://steamcommunity.com/sharedfiles/filedetails/?id=3843236809) — judge defeated rebels after a war.
+- [Siege Reworked](https://steamcommunity.com/sharedfiles/filedetails/?id=3847315392) — storm forts, lead sorties and negotiate surrender.
 
 ### Compatibility patches
 
